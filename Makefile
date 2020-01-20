@@ -1,6 +1,14 @@
 NAME = Pong
 
-SRCS :=	main.cpp SDL_Framework.cpp
+SRCS :=	AbstractPlayer.cpp  \
+	Ball.cpp  \
+	BotPlayerImpl.cpp  \
+	main.cpp  \
+	Pong.cpp  \
+	Racket.cpp  \
+	SDL_Framework.cpp  \
+	SDL_GraphicWorkerImpl.cpp \
+	UserPlayerImpl.cpp
 
 DIR_SRC := $(CURDIR)/src
 DIR_OBJ := $(CURDIR)/obj
@@ -30,9 +38,9 @@ endif
 ifeq ($(UNAME_S),Linux)
 	CC :=           gcc
     SDL2_INC =
-    SDL2_FLAGS =   `sdl2-config --cflags`
+    SDL2_FLAGS =  
     FLAG_F =
-    SDL2_LINK =     `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lSDL2_mixer
+    SDL2_LINK =  `sdl2-config --cflags --libs` -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lSDL2_mixer 
     OTHER_FLAGS =       -pthread
 endif
 
