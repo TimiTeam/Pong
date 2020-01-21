@@ -15,6 +15,6 @@ public:
 	BotPlayerImpl(const BotPlayerImpl& src);
 	~BotPlayerImpl();
 	BotPlayerImpl& operator=(const BotPlayerImpl& src);
-	virtual void updateState(eDirection dir);
+	virtual void updateState(eDirection dir, int top, int bottom);
 };
 #endif

@@ -68,6 +68,7 @@ void Pong::runGame(){
 			playerTwo = PlayerFactory::getInstance().createPlayer(BOT, "Bot", ball);
 			gw.setPlayerOnArrows(*playerOne);
 			gw.setPlayerOnKeyboard(*playerTwo);
+			playerTwo->setSpeed(1);
 		}
 		setUpPlayer(*playerOne, *playerTwo, ball);
 		while (isRun)
@@ -75,7 +76,7 @@ void Pong::runGame(){
 			gw.clearScreen();
 			if (ball.moveBall(5, winSizeY - 5, *playerOne, *playerTwo) != NULL)
 			{
-				//ball.setPosition(winSizeX / 2, winSizeY / 2);
+				ball.setPosition(winSizeX / 2, winSizeY / 2);
 			}
 			gw.drawPlayer(*playerOne);
 			gw.drawPlayer(*playerTwo);

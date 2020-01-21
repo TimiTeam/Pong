@@ -24,6 +24,7 @@ FLAGS = -Wall -Wextra -Werror
 
 FLAGS = 
 
+
 ifeq ($(UNAME_S),Darwin)
 	CC :=			clang++
 	SDL2_INC =      -I $(CURDIR)/frameworks/SDL2.framework/Headers/ \
@@ -56,7 +57,7 @@ $(NAME): $(OBJS)
 	$(CC) -o $@ $^ $(FLAG_F) $(SDL2_LINK) $(SDL2_INC)
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp | $(DIR_OBJ)
-	$(CC) -g $(FLAGS) -c -o $@ $^ $(FLAG_F) $(SDL2_INC) $(SDL2_FLAGS)
+	$(CC) -g  $(FLAGS) -c -o $@ $^ $(FLAG_F) $(SDL2_INC) $(SDL2_FLAGS)
 
 clean:
 	/bin/rm -rf $(OBJS)

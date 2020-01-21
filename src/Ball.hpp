@@ -16,6 +16,7 @@ private:
 	int width;
 	Ball();
 	Ball(const Ball& src);
+	bool checkColision(AbstractPlayer &player);
 
 public:
 	~Ball();

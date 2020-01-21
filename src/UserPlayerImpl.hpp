@@ -14,6 +14,6 @@ public:
 	UserPlayerImpl(const UserPlayerImpl& src);
 	~UserPlayerImpl();
 	UserPlayerImpl& operator=(const UserPlayerImpl& src);
-	void updateState(eDirection dir);
+	void updateState(eDirection dir, int top, int bottom);
 };
 #endif

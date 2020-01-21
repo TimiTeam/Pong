@@ -23,20 +23,30 @@ Ball& Ball::operator=(const Ball& src)
 	return *this;
 }
 
+bool Ball::checkColision(AbstractPlayer &player){
+	int playerPosY = player.getPosY();
+	if (posX >= player.getPosX() && posY >= playerPosY && posY <= playerPosY + player.getHeight())
+		return true;
+	return false;
+}
+
 AbstractPlayer *Ball::moveBall(int top, int bottom, AbstractPlayer &playerLeft, AbstractPlayer &playerRight){
 	AbstractPlayer *ret = NULL;
 	if (posY + dirY <= top || posY + dirY >= bottom){
 		dirY *= -1;
 	}
-	if (posX < playerLeft.getPosX()){
+	if (checkColision(playerLeft)){	
+		dirX *= -1;
+	}
+	else if (posX < playerLeft.getPosX())
 		ret = &playerLeft;
+	
+	if (checkColision(playerRight)){
 		dirX *= -1;
 	}
-
-	if (posX > playerRight.getPosX()){
+	else if (posX > playerRight.getPosX())
 		ret = &playerRight;
-		dirX *= -1;
-	}
+
 	posX += dirX;
 	posY += dirY;
 	return ret;

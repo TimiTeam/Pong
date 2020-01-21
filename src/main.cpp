@@ -5,9 +5,9 @@ int 	main(void){
 	
 	IGraphicWorker &gw = SDL_GraphicWorkerImpl::getInstance();
 
-	Pong p(1480, 1024, gw);
+	Pong p(1024, 720, gw);
 	p.runGame();
 
-	system("leaks -q Pong");
+	//system("leaks -q Pong");
 	return (0);
 }

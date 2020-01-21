@@ -25,15 +25,16 @@ UserPlayerImpl& UserPlayerImpl::operator=(const UserPlayerImpl& src)
 	return *this;
 }
 
-void UserPlayerImpl::updateState(eDirection dir){
-	switch (dir)
-	{
+void UserPlayerImpl::updateState(eDirection dir, int top, int bottom){
+	switch (dir){
 	case UP:
-		setPosY(getPosY() - speed);
+		if (posY - speed > top)
+			setPosY(posY - speed);
 		break;
 	
 	case DOWN:
-		setPosY(getPosY() + speed);
+		if (posY + height + speed < bottom)
+			setPosY(posY + speed);
 		break;
 	default:
 		break;

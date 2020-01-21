@@ -66,7 +66,7 @@ void SDL_GraphicWorkerImpl::makeKeysEvent(SDL_Keycode up, SDL_Keycode down, Abst
 			}
 		}
 	}
-	player.updateState(result);
+	player.updateState(result, 0, winSizeY);	
 }
 
 void SDL_GraphicWorkerImpl::getPlayerInputArrows(){
@@ -76,7 +76,7 @@ void SDL_GraphicWorkerImpl::getPlayerInputArrows(){
 
 void SDL_GraphicWorkerImpl::getPlayerInputKeyboard(){
 	if (playerKeyboard != NULL)
-	makeKeysEvent(SDLK_w, SDLK_s, *playerKeyboard);
+		makeKeysEvent(SDLK_w, SDLK_s, *playerKeyboard);
 }
 
 void SDL_GraphicWorkerImpl::updatePlayers(){
@@ -87,6 +87,8 @@ void SDL_GraphicWorkerImpl::updatePlayers(){
 bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int sizeY){
 	isRun = false;
 	
+	winSizeY = sizeY;
+	winSizeX = sizeX;
 	if (framework != NULL && framework->initSDL(title,  sizeX,  sizeY)){
 		screen = framework->getMainTexture();
 		isRun = true;

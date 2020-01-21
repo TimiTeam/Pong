@@ -8,7 +8,7 @@ class SDL_GraphicWorkerImpl : public IGraphicWorker
 {
 private: 
 	static SDL_GraphicWorkerImpl *selfGW;
-	int winsizeX;
+	int winSizeX;
 	int winSizeY;
 	SDL_Framework *framework;
 	SDL_Texture	*screen;
