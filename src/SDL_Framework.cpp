@@ -2,7 +2,10 @@
 
 SDL_Framework::SDL_Framework()
 {
-	
+	win = NULL;
+	ren = NULL;
+	mainTexture = NULL;
+	font = NULL;
 }
 
 SDL_Framework::SDL_Framework(const SDL_Framework& src)
@@ -46,6 +49,31 @@ SDL_Texture *SDL_Framework::loadTexture(std::string path){
 	return ret;
 }
 
+
+bool SDL_Framework::loadTTF(std::string path, int size){
+	font = TTF_OpenFont(path.c_str(), size);
+	if (font == NULL){
+		std::cout << "Can't open font: "+path+": "+std::string(TTF_GetError())+"\n";
+		return false;
+	}
+	return true;
+}
+
+SDL_Texture *SDL_Framework::createTextTexture(std::string str, int r, int g, int b){
+	SDL_Texture *result = NULL;
+	SDL_Surface *surf = NULL; 
+	if (font != NULL){
+		SDL_Color col = {r, g, b};
+		surf = TTF_RenderText_Solid(font, str.c_str(), col);
+		if (surf != NULL){
+			result = SDL_CreateTextureFromSurface(ren, surf);
+		}
+		else
+			std::cout << "Can't create texture: "+std::string(TTF_GetError())+"\n";
+	}
+	return result;
+}
+
 bool SDL_Framework::initSDL(const std::string title, int sizeX, int sizeY){
 	bool ret = true;
 
@@ -82,6 +110,12 @@ bool SDL_Framework::initSDL(const std::string title, int sizeX, int sizeY){
 				if (mainTexture == NULL){
 					std::cout << "Can't create main texture: "+std::string(SDL_GetError())+"\n";
 					ret = false;
+				}else
+				{
+					if(TTF_Init() == -1){
+						ret = false;
+						std::cout << "Can't init SDL TTF : "+std::string(TTF_GetError())+"\n";
+					}
 				}
 			}
 		}
@@ -102,6 +136,7 @@ void SDL_Framework::close(){
 		SDL_DestroyTexture(mainTexture);
 		mainTexture = NULL;
 	}
+	TTF_Quit();
     IMG_Quit();
     SDL_Quit();
 }

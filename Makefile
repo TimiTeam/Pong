@@ -9,7 +9,8 @@ SRCS :=	AbstractPlayer.cpp  \
 	Pong.cpp  \
 	SDL_Framework.cpp  \
 	SDL_GraphicWorkerImpl.cpp \
-	UserPlayerImpl.cpp
+	UserPlayerImpl.cpp \
+	PlayerFactory.cpp
 
 DIR_SRC := $(CURDIR)/src
 DIR_OBJ := $(CURDIR)/obj

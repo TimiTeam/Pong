@@ -26,6 +26,8 @@ public:
 	bool setRenderTarget(SDL_Texture *target);
 	void renderPresent(SDL_Texture *text);
 	SDL_Texture *loadTexture(std::string path);
+	SDL_Texture *createTextTexture(std::string str, int r, int g, int b);
 	SDL_Texture *getMainTexture();
+	bool loadTTF(std::string pth, int size);
 };
 #endif

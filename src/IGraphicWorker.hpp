@@ -13,9 +13,11 @@ public:
 	virtual ~IGraphicWorker() {};
 	virtual bool initGame(const std::string title, int sizeX, int sizeY) = 0;
 	virtual bool isRunGame() = 0;
-	virtual void setKeyListnerOne(AbstractPlayer &player) = 0;
-	virtual void setKeyListnerTwo(AbstractPlayer &player) = 0;
-	virtual void getPlayerInput() = 0;
+	virtual void printMenu() = 0;
+	virtual bool isMultiplayerGame() = 0;
+	virtual void setPlayerOnArrows(AbstractPlayer &player) = 0;
+	virtual void setPlayerOnKeyboard(AbstractPlayer &player) = 0;
+	virtual void updatePlayers() = 0;
 	virtual void drawPlayer(AbstractPlayer &player) = 0;
 	virtual void drawBall(Ball &ball) = 0;
 	virtual void updateScreen() = 0;

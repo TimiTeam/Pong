@@ -1,11 +1,12 @@
 #include "Pong.hpp"
+# include "PlayerFactory.hpp"
 
-Pong::Pong(int winSizeX, int winSizeY, IGraphicWorker &gw, AbstractPlayer &left, AbstractPlayer &right, Ball &ball) : winSizeX(winSizeX), winSizeY(winSizeY), gw(gw), leftPlayer(left), rightPlayer(right), ball(ball)
+Pong::Pong(int winSizeX, int winSizeY, IGraphicWorker &gw) : winSizeX(winSizeX), winSizeY(winSizeY), gw(gw)
 {
 
 }
 
-Pong::Pong(const Pong& src) : gw(src.gw), leftPlayer(src.leftPlayer), rightPlayer(src.rightPlayer), ball(src.ball)
+Pong::Pong(const Pong& src) : gw(src.gw)
 {
 	*this = src;
 }
@@ -21,49 +22,70 @@ Pong& Pong::operator=(const Pong& src)
 		this->winSizeX = src.winSizeX;
 		this->winSizeY = src.winSizeY;
 		this->gw = src.gw;
-		this->leftPlayer = src.leftPlayer;
-		this->rightPlayer = src.rightPlayer;
-		this->ball = src.ball;
 	}
 	return *this;
 }
- 
+
+void Pong::setUpPlayer(AbstractPlayer &left, AbstractPlayer &right, Ball &ball){
+	int height = winSizeY / 10;
+	int width = winSizeX / 30;
+	int posY = winSizeY / 2 - height;
+	
+	left.setPosX(0 + width * 2);
+	left.setPosY(posY);
+	left.setHeight(height);
+	left.setWidth(width);
+
+	right.setPosX(winSizeX - width * 2 - width);
+	right.setPosY(posY);
+	right.setHeight(height);
+	right.setWidth(width);
+
+	ball.setPosition(winSizeX / 2 - height / 2, winSizeY / 2 - height / 2);
+	ball.setHeight(height / 2);
+	ball.setWidth(height / 2);
+}
+
 void Pong::runGame(){
 	bool isRun = false;
+	bool isMultiplayer = false;
+	AbstractPlayer *playerOne;
+	AbstractPlayer *playerTwo;
 
 	if ((isRun = gw.initGame("Pong", winSizeX, winSizeY)) == false)
 		std::cout << "Can't create game. Exit.\n";
 	else{
-		int height = winSizeY / 6;
-		int width = winSizeX / 25;
-		float posY =  winSizeY / 2;
-		leftPlayer.setPosX(width);
-		leftPlayer.setPosY(posY);
-		leftPlayer.setHeight(height);
-		leftPlayer.setWidth(width);
-		rightPlayer.setPosX(winSizeX - width * 2);
-		rightPlayer.setPosY(posY);
-		rightPlayer.setHeight(height);
-		rightPlayer.setWidth(width);
-		gw.setKeyListnerOne(leftPlayer);
-		ball.setHeight(100);
-		ball.setWidth(100);
-		//gw.setKeyListnerTwo(rightPlayer);
-		ball.setPosition(winSizeX / 2, winSizeY / 2);
+		Ball &ball = Ball::getInstance();
+		gw.printMenu();
+		isMultiplayer = gw.isMultiplayerGame();
+		playerOne = PlayerFactory::getInstance().createPlayer(ALIVE, "Player 1", ball);
+		if (isMultiplayer){
+			playerTwo = PlayerFactory::getInstance().createPlayer(ALIVE, "Player 2", ball);
+			gw.setPlayerOnKeyboard(*playerOne);
+			gw.setPlayerOnArrows(*playerTwo);
+		}
+		else{
+			playerTwo = PlayerFactory::getInstance().createPlayer(BOT, "Bot", ball);
+			gw.setPlayerOnArrows(*playerOne);
+			gw.setPlayerOnKeyboard(*playerTwo);
+		}
+		setUpPlayer(*playerOne, *playerTwo, ball);
 		while (isRun)
 		{
 			gw.clearScreen();
-			if (ball.moveBall(5, winSizeY - 5, leftPlayer, rightPlayer) != NULL)
+			if (ball.moveBall(5, winSizeY - 5, *playerOne, *playerTwo) != NULL)
 			{
-				ball.setPosition(winSizeX / 2, winSizeY / 2);
+				//ball.setPosition(winSizeX / 2, winSizeY / 2);
 			}
-			gw.getPlayerInput();
-			gw.drawPlayer(leftPlayer);
-			gw.drawPlayer(rightPlayer);
+			gw.drawPlayer(*playerOne);
+			gw.drawPlayer(*playerTwo);
+			gw.updatePlayers();
 			gw.drawBall(ball);
 			gw.updateScreen();
 			isRun = gw.isRunGame();
 		}
 	}
+	// delete [] playerOne;
+	// delete [] playerTwo;
 	gw.closeGame();
 }

@@ -4,8 +4,8 @@ SDL_GraphicWorkerImpl *SDL_GraphicWorkerImpl::selfGW = 0;
 
 SDL_GraphicWorkerImpl::SDL_GraphicWorkerImpl()
 {
-	listnerOne = NULL;
-	listnerTwo = NULL;
+	playerArrow = NULL;
+	playerKeyboard = NULL;
 	framework = new SDL_Framework();
 	playerTexture = NULL;
 	ballTexture = NULL;
@@ -32,50 +32,56 @@ bool SDL_GraphicWorkerImpl::isRunGame(){
 	return isRun;
 }
 
-void SDL_GraphicWorkerImpl::getPlayerInput(){
+void SDL_GraphicWorkerImpl::setPlayerOnArrows(AbstractPlayer &player){
+	playerArrow = &player;
+}
+
+void SDL_GraphicWorkerImpl::setPlayerOnKeyboard(AbstractPlayer &player){
+	playerKeyboard = &player;
+}
+
+void SDL_GraphicWorkerImpl::printMenu(){
+	isMulti = false;
+}
+
+bool SDL_GraphicWorkerImpl::isMultiplayerGame(){
+	return isMulti;
+}
+
+
+void SDL_GraphicWorkerImpl::makeKeysEvent(SDL_Keycode up, SDL_Keycode down, AbstractPlayer &player){
 	SDL_Event	e;
-	eDirection resultOne = NON;
-	eDirection resultTwo = NON;
-
-
+	eDirection result = NON;
 	while (SDL_PollEvent(&e))
 	{
 		if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
 			isRun = false;
 		else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 		{
-			if (e.key.keysym.sym == SDLK_UP){
-				resultOne = UP;
+			if (e.key.keysym.sym == up){
+				result = UP;
 			}
-			else if (e.key.keysym.sym == SDLK_DOWN){
-				resultOne = DOWN;
-			}
-			if (e.key.keysym.sym == SDLK_w){
-				resultTwo = UP;
-			}
-			else if (e.key.keysym.sym == SDLK_s){
-				resultTwo = DOWN;
+			else if (e.key.keysym.sym == down){
+				result = DOWN;
 			}
 		}
 	}
-	if (listnerOne != NULL){
-		if (listnerTwo == NULL)
-			listnerOne->updateState(resultOne);
-		else
-			listnerOne->updateState(resultTwo);
-	}
-	if (listnerTwo != NULL){
-		listnerTwo->updateState(resultOne);
-	}
+	player.updateState(result);
 }
 
-
-void SDL_GraphicWorkerImpl::setKeyListnerOne(AbstractPlayer &player){
-	this->listnerOne = &player;
+void SDL_GraphicWorkerImpl::getPlayerInputArrows(){
+	if (playerArrow != NULL)
+		makeKeysEvent(SDLK_UP, SDLK_DOWN, *playerArrow);
 }
 
-void SDL_GraphicWorkerImpl::setKeyListnerTwo(AbstractPlayer &player){
-	this->listnerTwo = &player;
+void SDL_GraphicWorkerImpl::getPlayerInputKeyboard(){
+	if (playerKeyboard != NULL)
+	makeKeysEvent(SDLK_w, SDLK_s, *playerKeyboard);
+}
+
+void SDL_GraphicWorkerImpl::updatePlayers(){
+	getPlayerInputArrows();
+	getPlayerInputKeyboard();
 }
 
 bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int sizeY){

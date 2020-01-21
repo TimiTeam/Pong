@@ -28,11 +28,15 @@ AbstractPlayer *Ball::moveBall(int top, int bottom, AbstractPlayer &playerLeft, 
 	if (posY + dirY <= top || posY + dirY >= bottom){
 		dirY *= -1;
 	}
-	if (posX < playerLeft.getPosX())
+	if (posX < playerLeft.getPosX()){
 		ret = &playerLeft;
+		dirX *= -1;
+	}
 
-	if (posX > playerRight.getPosX())
+	if (posX > playerRight.getPosX()){
 		ret = &playerRight;
+		dirX *= -1;
+	}
 	posX += dirX;
 	posY += dirY;
 	return ret;

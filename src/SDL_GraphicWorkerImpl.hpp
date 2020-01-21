@@ -15,9 +15,14 @@ private:
 	SDL_Texture	*playerTexture;
 	SDL_Texture	*ballTexture;
 	bool isRun;
+	bool isMulti;
+	AbstractPlayer *playerArrow;
+	AbstractPlayer *playerKeyboard;
+
 	SDL_GraphicWorkerImpl();
-	AbstractPlayer *listnerOne;
-	AbstractPlayer *listnerTwo;
+	void makeKeysEvent(SDL_Keycode up, SDL_Keycode down, AbstractPlayer &playe);
+	void getPlayerInputArrows();
+	void getPlayerInputKeyboard();
 
 public:
 	SDL_GraphicWorkerImpl(const SDL_GraphicWorkerImpl& src);
@@ -27,9 +32,11 @@ public:
 	// IGraphicWorker
 	bool initGame(const std::string title, int sizeX, int sizeY);
 	bool isRunGame();
-	void setKeyListnerOne(AbstractPlayer &player);
-	void setKeyListnerTwo(AbstractPlayer &player);
-	void getPlayerInput();
+	void updatePlayers();
+	void printMenu();
+	bool isMultiplayerGame();
+	void setPlayerOnArrows(AbstractPlayer &player);
+	void setPlayerOnKeyboard(AbstractPlayer &player);
 	void drawPlayer(AbstractPlayer &player);
 	void drawBall(Ball &ball);
 	void clearScreen();
