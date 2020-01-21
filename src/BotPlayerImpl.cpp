@@ -27,5 +27,16 @@ BotPlayerImpl& BotPlayerImpl::operator=(const BotPlayerImpl& src)
 
 void BotPlayerImpl::updateState(eDirection dir)
 {
-	//changePos(ball.getDirections());
+	switch (ball.getDirections())
+	{
+	case UP:
+		setPosY(getPosY() - speed);
+		break;
+	
+	case DOWN:
+		setPosY(getPosY() + speed);
+		break;
+	default:
+		break;
+	}
 }

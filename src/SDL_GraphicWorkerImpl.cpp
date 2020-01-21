@@ -4,8 +4,9 @@ SDL_GraphicWorkerImpl *SDL_GraphicWorkerImpl::selfGW = 0;
 
 SDL_GraphicWorkerImpl::SDL_GraphicWorkerImpl()
 {
-	this->listner = NULL;
-	this->framework = new SDL_Framework();
+	listnerOne = NULL;
+	listnerTwo = NULL;
+	framework = new SDL_Framework();
 	playerTexture = NULL;
 	ballTexture = NULL;
 	screen = NULL;
@@ -33,7 +34,9 @@ bool SDL_GraphicWorkerImpl::isRunGame(){
 
 void SDL_GraphicWorkerImpl::getPlayerInput(){
 	SDL_Event	e;
-	eDirection result = NON;
+	eDirection resultOne = NON;
+	eDirection resultTwo = NON;
+
 
 	while (SDL_PollEvent(&e))
 	{
@@ -42,22 +45,37 @@ void SDL_GraphicWorkerImpl::getPlayerInput(){
 		else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 		{
 			if (e.key.keysym.sym == SDLK_UP){
-				result = UP;
-				break ;
+				resultOne = UP;
 			}
 			else if (e.key.keysym.sym == SDLK_DOWN){
-				result = DOWN;
-				break;
+				resultOne = DOWN;
+			}
+			if (e.key.keysym.sym == SDLK_w){
+				resultTwo = UP;
+			}
+			else if (e.key.keysym.sym == SDLK_s){
+				resultTwo = DOWN;
 			}
 		}
 	}
-	if (listner != NULL)
-		listner->updateState(result);
+	if (listnerOne != NULL){
+		if (listnerTwo == NULL)
+			listnerOne->updateState(resultOne);
+		else
+			listnerOne->updateState(resultTwo);
+	}
+	if (listnerTwo != NULL){
+		listnerTwo->updateState(resultOne);
+	}
 }
 
 
-void SDL_GraphicWorkerImpl::setKeyListner(AbstractPlayer &player){
-	this->listner = &player;
+void SDL_GraphicWorkerImpl::setKeyListnerOne(AbstractPlayer &player){
+	this->listnerOne = &player;
+}
+
+void SDL_GraphicWorkerImpl::setKeyListnerTwo(AbstractPlayer &player){
+	this->listnerTwo = &player;
 }
 
 bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int sizeY){
@@ -68,6 +86,8 @@ bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int siz
 		isRun = true;
 		if (playerTexture == NULL)
 			playerTexture = framework->loadTexture("Racket.jpeg");
+		if (ballTexture == NULL)
+			ballTexture = framework->loadTexture("Ball.png");
 	}
 	return isRun;
 }
@@ -79,9 +99,10 @@ void SDL_GraphicWorkerImpl::drawPlayer(AbstractPlayer &player){
 	framework->setRenderTarget(NULL);
 }
 
-void SDL_GraphicWorkerImpl::drawBall(Ball ball){
+void SDL_GraphicWorkerImpl::drawBall(Ball &ball){
 	framework->setRenderTarget(screen);
-	framework->drawTexture(ballTexture, NULL, NULL);
+	SDL_Rect rect = {ball.getPosX(), ball.getPosY(), ball.getWidth(), ball.getHeight()};
+	framework->drawTexture(ballTexture, NULL, &rect);
 	framework->setRenderTarget(NULL);
 }
 

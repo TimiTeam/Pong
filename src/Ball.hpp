@@ -8,10 +8,10 @@ class Ball
 {
 private:
     static Ball *ball;
-	float posX;
-	float posY;
-	float dirX;
-	float dirY;
+	int posX;
+	int posY;
+	int dirX;
+	int dirY;
 	int height;
 	int width;
 	Ball();
@@ -20,8 +20,15 @@ private:
 public:
 	~Ball();
 	Ball& operator=(const Ball& src);
-	void moveBall();
+	AbstractPlayer *moveBall(int top, int bottom, AbstractPlayer &playerLeft, AbstractPlayer &playerRight);
 	eDirection getDirections();
+	int getPosX();
+	int getPosY();
+	int getHeight();
+	int getWidth();
+	void setHeight(int height);
+	void setWidth(int width);
+	void setPosition(int x, int y);
 	static Ball& getInstance();
 };
 #endif

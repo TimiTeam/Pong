@@ -5,6 +5,7 @@
 # include "AbstractPlayer.hpp"
 # include "IGraphicWorker.hpp"
 # include "Ball.hpp"
+# define FRAME_VALUES 10
 
 class Pong
 {

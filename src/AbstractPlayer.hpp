@@ -36,6 +36,7 @@ public:
 	float getPosY();
 	int getWidth();
 	int getHeight();
+	float getSpeed();
 	void setHeight(int height);
 	void setWidth(int width);
 	void incrementScore();

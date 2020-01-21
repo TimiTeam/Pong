@@ -16,7 +16,8 @@ private:
 	SDL_Texture	*ballTexture;
 	bool isRun;
 	SDL_GraphicWorkerImpl();
-	AbstractPlayer *listner;
+	AbstractPlayer *listnerOne;
+	AbstractPlayer *listnerTwo;
 
 public:
 	SDL_GraphicWorkerImpl(const SDL_GraphicWorkerImpl& src);
@@ -26,10 +27,11 @@ public:
 	// IGraphicWorker
 	bool initGame(const std::string title, int sizeX, int sizeY);
 	bool isRunGame();
-	void setKeyListner(AbstractPlayer &player);
+	void setKeyListnerOne(AbstractPlayer &player);
+	void setKeyListnerTwo(AbstractPlayer &player);
 	void getPlayerInput();
 	void drawPlayer(AbstractPlayer &player);
-	void drawBall(Ball ball);
+	void drawBall(Ball &ball);
 	void clearScreen();
 	void updateScreen();
 	void closeGame();
