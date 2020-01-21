@@ -1,15 +1,15 @@
 #include "Pong.hpp"
 
-Pong::Pong(int winSizeX, int winSizeY, IGraphicWorker &gw, AbstractPlayer &left, AbstractPlayer &right) : winSizeX(winSizeX), winSizeY(winSizeY), gw(gw), leftPlayer(left), rightPlayer(right)
+Pong::Pong(int winSizeX, int winSizeY, IGraphicWorker &gw, AbstractPlayer &left, AbstractPlayer &right, Ball &ball) : winSizeX(winSizeX), winSizeY(winSizeY), gw(gw), leftPlayer(left), rightPlayer(right), ball(ball)
 {
 
 }
-/*
-Pong::Pong(const Pong& src)
+
+Pong::Pong(const Pong& src) : gw(src.gw), leftPlayer(src.leftPlayer), rightPlayer(src.rightPlayer), ball(src.ball)
 {
 	*this = src;
 }
-*/
+
 Pong::~Pong()
 {
 	
@@ -23,25 +23,38 @@ Pong& Pong::operator=(const Pong& src)
 		this->gw = src.gw;
 		this->leftPlayer = src.leftPlayer;
 		this->rightPlayer = src.rightPlayer;
+		this->ball = src.ball;
 	}
 	return *this;
 }
  
 void Pong::runGame(){
-	bool isRun = true;
+	bool isRun = false;
 
-	if (gw.initGame() == false)
+	if ((isRun = gw.initGame("Pong", winSizeX, winSizeY)) == false)
 		std::cout << "Can't create game. Exit.\n";
 	else{
+		int height = winSizeY / 8;
+		int width = winSizeX / 10;
+		float posY =  winSizeY / 2;
+		leftPlayer.setPosX(static_cast<float>(winSizeX / 8));
+		leftPlayer.setPosY(posY);
+		leftPlayer.setHeight(height);
+		leftPlayer.setWidth(width);
+		rightPlayer.setPosX(static_cast<float>(winSizeX - leftPlayer.getPosX()));
+		rightPlayer.setPosY(posY);
+		rightPlayer.setHeight(height);
+		rightPlayer.setWidth(width);
+		gw.setKeyListner(leftPlayer);
 		while (isRun)
 		{
 			gw.clearScreen();
-			ball.moveBall();
-			leftPlayer.changePos(gw.getPlayerInput());
+			//ball.moveBall();
+			gw.getPlayerInput();
 			gw.drawPlayer(leftPlayer);
 			gw.drawPlayer(rightPlayer);
-			isRun = gw.isRunGame();
 			gw.updateScreen();
+			isRun = gw.isRunGame();
 		}
 	}
 	gw.closeGame();

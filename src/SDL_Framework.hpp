@@ -16,11 +16,10 @@ private:
 
 public:
 	SDL_Framework();
-	SDL_Framework(int sizeX, int sizeY);
 	SDL_Framework(const SDL_Framework& src);
 	~SDL_Framework();
 	SDL_Framework& operator=(const SDL_Framework& src);
-	bool initSDL();
+	bool initSDL(const std::string title, int sizeX, int sizeY);
 	void close();
 	void drawTexture(SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *dstRect);
 	void clearScrean();

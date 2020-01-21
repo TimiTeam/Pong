@@ -7,7 +7,6 @@ SRCS :=	AbstractPlayer.cpp  \
 	BotPlayerImpl.cpp  \
 	main.cpp  \
 	Pong.cpp  \
-	Racket.cpp  \
 	SDL_Framework.cpp  \
 	SDL_GraphicWorkerImpl.cpp \
 	UserPlayerImpl.cpp
@@ -56,7 +55,7 @@ $(NAME): $(OBJS)
 	$(CC) -o $@ $^ $(FLAG_F) $(SDL2_LINK) $(SDL2_INC)
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp | $(DIR_OBJ)
-	$(CC) $(FLAGS) -c -o $@ $^ $(FLAG_F) $(SDL2_INC) $(SDL2_FLAGS)
+	$(CC) -g $(FLAGS) -c -o $@ $^ $(FLAG_F) $(SDL2_INC) $(SDL2_FLAGS)
 
 clean:
 	/bin/rm -rf $(OBJS)

@@ -14,19 +14,32 @@ class AbstractPlayer
 private:
 
 protected:
-	int posX;
-	int posY;
+	std::string name;
+	float posX;
+	float posY;
+	int height;
+	int width;
 	float speed;
 	int score;
 
 public:
 	AbstractPlayer();
+	AbstractPlayer(std::string name);
+	AbstractPlayer(float posX, float posY, int height, int width);
 	AbstractPlayer(const AbstractPlayer& src);
 	~AbstractPlayer();
 	AbstractPlayer& operator=(const AbstractPlayer& src);
-	virtual void updateState() const = 0;
-	void changePos(eDirection e);
+	virtual void updateState(eDirection dir) = 0;
+	void setPosX(float x);
+	void setPosY(float y);
+	float getPosX();
+	float getPosY();
+	int getWidth();
+	int getHeight();
+	void setHeight(int height);
+	void setWidth(int width);
 	void incrementScore();
 	int getScore();
+	void setSpeed(float speed);
 };
 #endif

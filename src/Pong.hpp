@@ -14,11 +14,11 @@ private:
 	int winSizeY;
 	AbstractPlayer &leftPlayer;
 	AbstractPlayer &rightPlayer;
-	Ball ball;
+	Ball &ball;
 
 public:
-	Pong(int winSizeX, int winSizeY, IGraphicWorker &gw, AbstractPlayer &left, AbstractPlayer &right);
-	//Pong(const Pong& src);
+	Pong(int winSizeX, int winSizeY, IGraphicWorker &gw, AbstractPlayer &left, AbstractPlayer &right, Ball &ball);
+	Pong(const Pong& src);
 	~Pong();
 	void runGame();
 	Pong& operator=(const Pong& src);

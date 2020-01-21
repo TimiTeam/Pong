@@ -5,10 +5,6 @@ SDL_Framework::SDL_Framework()
 	
 }
 
-SDL_Framework::SDL_Framework(int sizeX, int sizeY): sizeX(sizeX), sizeY(sizeY)
-{
-}
-
 SDL_Framework::SDL_Framework(const SDL_Framework& src)
 {
 	*this = src;
@@ -16,7 +12,6 @@ SDL_Framework::SDL_Framework(const SDL_Framework& src)
 
 SDL_Framework::~SDL_Framework()
 {
-	
 }
 
 SDL_Framework& SDL_Framework::operator=(const SDL_Framework& src)
@@ -39,45 +34,55 @@ void SDL_Framework::drawTexture(SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rec
 SDL_Texture *SDL_Framework::loadTexture(std::string path){
 	SDL_Texture *ret = NULL;
 	SDL_Surface *surf = IMG_Load(path.c_str());
-	
 	if (surf == NULL){
 		std::cout << "Can't locad image: "+path+"\n";
-		surf = SDL_CreateRGBSurface(0, sizeX / 4, sizeY / 4, 32,
-                                   RMASK, GMASK, BMASK, 0);
 	}
-	if (surf != NULL){
+	else{
 		ret = SDL_CreateTextureFromSurface(ren, surf);
 		SDL_FreeSurface(surf);
+		if (ret == NULL)
+			std::cout << "Can't create texture\n";
 	}
-	if (ret == NULL)
-		std::cout << "Can't create texture\n";
 	return ret;
 }
 
-bool SDL_Framework::initSDL(){
+bool SDL_Framework::initSDL(const std::string title, int sizeX, int sizeY){
 	bool ret = true;
-	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) != 0)
+
+
+	this->sizeX = sizeX;
+	this->sizeY = sizeY;
+	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) != 0){
+		std::cout << "Can't init SDL: "+std::string(SDL_GetError())+"\n";
 		ret = false;
+	}
 	else
 	{
-		win = SDL_CreateWindow("Pong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, sizeX, sizeY, SDL_WINDOW_SHOWN | SDL_WINDOW_MOUSE_FOCUS);
-		if (win == NULL)
+		win = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, sizeX, sizeY, SDL_WINDOW_SHOWN | SDL_WINDOW_MOUSE_FOCUS);
+		if (win == NULL){
+			std::cout << "Can't create window: "+std::string(SDL_GetError())+"\n";
 			ret = false;
+		}
 		else
 		{
 			ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
-			if (ren == NULL)
+			if (ren == NULL){
+				std::cout << "Can't create renderer: "+std::string(SDL_GetError())+"\n";
 				ret = false;
+			}
 			else{
 				SDL_SetRenderDrawColor(ren, 0xFF, 0xFF, 0xFF, 0xFF);
-				int flags=IMG_INIT_JPG|IMG_INIT_PNG;
+				int flags = IMG_INIT_PNG;
 				if(!(IMG_Init(flags) & flags)){
+					std::cout << "Can't init SDL IMG: "+std::string(IMG_GetError())+"\n";
                     ret = false;
                 }
 				else
 					mainTexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, sizeX, sizeY);
-				if (mainTexture == NULL)
+				if (mainTexture == NULL){
+					std::cout << "Can't create main texture: "+std::string(SDL_GetError())+"\n";
 					ret = false;
+				}
 			}
 		}
 	}
@@ -85,10 +90,18 @@ bool SDL_Framework::initSDL(){
 }
 
 void SDL_Framework::close(){
-	SDL_DestroyRenderer(ren);
-    SDL_DestroyWindow(win);
-    ren = NULL;
-    win = NULL;
+	if (ren != NULL){
+		SDL_DestroyRenderer(ren);
+		ren = NULL;
+	}
+	if (win != NULL){
+    	SDL_DestroyWindow(win);
+		win = NULL;
+	}
+	if (mainTexture != NULL){
+		SDL_DestroyTexture(mainTexture);
+		mainTexture = NULL;
+	}
     IMG_Quit();
     SDL_Quit();
 }
