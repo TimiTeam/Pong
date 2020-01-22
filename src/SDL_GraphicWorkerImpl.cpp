@@ -51,7 +51,7 @@ void SDL_GraphicWorkerImpl::printBalckText(std::string text, int posX, int posY,
 		std::cout << "Error: can't draw text\n";
 	}else{
 		framework->setRenderTarget(texture);
-		SDL_Rect rect = {posX, posY, height, width};
+		SDL_Rect rect = {posX, posY, width, height};
 		framework->drawTexture(texture, NULL, &rect);
 		framework->setRenderTarget(NULL);
 		SDL_DestroyTexture(texture);
@@ -67,7 +67,7 @@ void SDL_GraphicWorkerImpl::setPlayerOnKeyboard(AbstractPlayer &player){
 }
 
 void SDL_GraphicWorkerImpl::printMenu(){
-	
+
 	isMulti = false;
 }
 
@@ -172,4 +172,8 @@ SDL_GraphicWorkerImpl &SDL_GraphicWorkerImpl::getInstance(){
 	if (selfGW == NULL)
 		selfGW = new SDL_GraphicWorkerImpl();
 	return *selfGW;
+}
+
+void SDL_GraphicWorkerImpl::delay(int sec){
+	SDL_Delay(sec * 1000);
 }

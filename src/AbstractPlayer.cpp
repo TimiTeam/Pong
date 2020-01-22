@@ -91,3 +91,7 @@ int AbstractPlayer::getHeight(){
 float AbstractPlayer::getSpeed(){
 	return speed;
 }
+
+std::string AbstractPlayer::getName(){
+	return name;
+}

@@ -85,6 +85,16 @@ void Pong::runGame(){
 			gw.updateScreen();
 			isRun = gw.isRunGame();
 		}
+		if (sum == 20){
+			std::string message = playerOne->getScore() > playerTwo->getScore() ? playerOne->getName() : playerTwo->getName();
+			message += " Win!!";
+			int messWidth = winSizeX / 5;
+			int messHeight = winSizeY / 5;
+			gw.clearScreen();
+			gw.printBalckText(message, winSizeX / 2 - messWidth / 2, winSizeY / 2 - messHeight / 2, messHeight, messWidth);
+			gw.updateScreen();
+			gw.delay(3);
+		}
 	}
 	gw.closeGame();
 }

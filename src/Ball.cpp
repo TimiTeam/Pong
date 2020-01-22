@@ -1,4 +1,5 @@
 #include "Ball.hpp"
+#include <cmath> 
 
 Ball *Ball::ball = 0;
 
@@ -56,33 +57,28 @@ bool Ball::checkColision(int posX1, int posY1, int height1, int width1, int posX
 
 
 void Ball::ricochetFromPlayer(AbstractPlayer &check){
-	float part = check.getHeight() / 3;
+	int part = std::floor(check.getHeight() / 3);
 	int playerPosY = check.getPosY();
 	int ballCenter = posY + height / 2;
-	if (ballCenter > playerPosY && ballCenter <= playerPosY + part){
+	if (posY > playerPosY && ballCenter < playerPosY + part){
 		dirY = -1.f;
 	}
-	else if (ballCenter > playerPosY + part && ballCenter < playerPosY + check.getHeight() - part){
+	else if (ballCenter >= playerPosY + part && posY <= playerPosY + check.getHeight() - part){
 		dirY = 0;
 	}
-	else if (ballCenter >= playerPosY + check.getHeight() - part && ballCenter < playerPosY + check.getHeight()){
+	else if (posY > playerPosY + check.getHeight() - part && ballCenter < playerPosY + check.getHeight()){
 		dirY = 1.1;
 	}
 	dirX *= -1;
 }
 
 void Ball::moveBall(int top, int bottom, int leftSide, int rightSide, AbstractPlayer &playerLeft, AbstractPlayer &playerRight){
-	//AbstractPlayer *check;
 	bool goal = false;
 
 	(void)leftSide;
-	if (posY <= top){
-		posY = top;
-		dirY = 1.1f;
-	}
-	else if (posY + height >= bottom){
-		posY = bottom - height;
-		dirY = -1.f;
+
+	if (posY + dirY <= top || posY + height + dirY >= bottom){
+		dirY *= -1.f;
 	}
 	if (posX <= playerLeft.getPosX()){
 		playerRight.incrementScore();
@@ -92,16 +88,16 @@ void Ball::moveBall(int top, int bottom, int leftSide, int rightSide, AbstractPl
 		playerLeft.incrementScore();
 		goal = true;
 	}
-	if (posX + width / 2 < rightSide / 2 && !goal){
+	if (getDirections() == LEFT && !goal){
 		if (checkColision(posX, posY, height, 0, playerLeft.getPosX(), playerLeft.getPosY(), playerLeft.getHeight(), playerLeft.getWidth())){
 			ricochetFromPlayer(playerLeft);
-			speed += 0.05;
+			speed = std::abs(speed) + 0.1;
 		}
 	}
 	else if (!goal){
 		if (checkColision(posX , posY, height, width + speed, playerRight.getPosX(), playerRight.getPosY(), playerRight.getHeight(), 0)){
 			ricochetFromPlayer(playerRight);
-			speed += 0.05;
+			speed = (std::abs(speed) + 0.1) * -1;
 		}
 	}
 	if (goal){
@@ -111,7 +107,7 @@ void Ball::moveBall(int top, int bottom, int leftSide, int rightSide, AbstractPl
 		speed = 0;
 	}else{
 		posX = posX + dirX + speed;
-		posY = posY + dirY ;
+		posY = posY + dirY;
 	}
 }
 

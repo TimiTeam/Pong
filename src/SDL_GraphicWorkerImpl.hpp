@@ -43,6 +43,7 @@ public:
 	void clearScreen();
 	void updateScreen();
 	void closeGame();
+	void delay(int sec);
 	static SDL_GraphicWorkerImpl &getInstance();
 	// --------------
 };

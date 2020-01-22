@@ -42,6 +42,7 @@ public:
 	void setHeight(int height);
 	void setWidth(int width);
 	void incrementScore();
+	std::string getName();
 	int getScore();
 	void setSpeed(float speed);
 };

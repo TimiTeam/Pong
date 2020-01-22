@@ -24,5 +24,6 @@ public:
 	virtual void updateScreen() = 0;
 	virtual void clearScreen() = 0;
 	virtual void closeGame() = 0;
+	virtual void delay(int sec) = 0;
 };
 #endif
