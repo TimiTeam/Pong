@@ -65,10 +65,10 @@ void Ball::ricochetFromPlayer(AbstractPlayer &check){
 	if (posY + height > playerPosY && ballCenter < playerPosY + part){
 		dirY = -1.f;
 	}
-	else if (ballCenter >= playerPosY + part && posY <= playerPosY + check.getHeight() - part){
+	else if (ballCenter >= playerPosY + part && ballCenter <= playerPosY + check.getHeight() - part){
 		dirY = 0;
 	}
-	else if (posY > playerPosY + check.getHeight() - part && posY < playerPosY + check.getHeight()){
+	else if (ballCenter > playerPosY + check.getHeight() - part && posY < playerPosY + check.getHeight()){
 		dirY = 1.1;
 	}
 	dirX *= -1;

@@ -66,7 +66,6 @@ void SDL_GraphicWorkerImpl::setPlayerOnKeyboard(AbstractPlayer &player){
 
 void SDL_GraphicWorkerImpl::printMenu(){
 	bool menuRun = true;
-	//bool upChice = true;
 	SDL_Event e;
 
 	std::string menuHeader = "Choose type";
