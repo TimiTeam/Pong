@@ -44,6 +44,20 @@ bool SDL_GraphicWorkerImpl::isRunGame(){
 	return isRun;
 }
 
+
+void SDL_GraphicWorkerImpl::printBalckText(std::string text, int posX, int posY, int height, int width){
+	SDL_Texture *texture = framework->createTextTexture(text, 0, 0, 0);
+	if (texture == NULL){
+		std::cout << "Error: can't draw text\n";
+	}else{
+		framework->setRenderTarget(texture);
+		SDL_Rect rect = {posX, posY, height, width};
+		framework->drawTexture(texture, NULL, &rect);
+		framework->setRenderTarget(NULL);
+		SDL_DestroyTexture(texture);
+	}
+}
+
 void SDL_GraphicWorkerImpl::setPlayerOnArrows(AbstractPlayer &player){
 	playerArrow = &player;
 }
@@ -53,6 +67,7 @@ void SDL_GraphicWorkerImpl::setPlayerOnKeyboard(AbstractPlayer &player){
 }
 
 void SDL_GraphicWorkerImpl::printMenu(){
+	
 	isMulti = false;
 }
 
@@ -108,6 +123,7 @@ bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int siz
 			playerTexture = framework->loadTexture("Racket.jpeg");
 		if (ballTexture == NULL)
 			ballTexture = framework->loadTexture("Ball.png");
+		framework->loadTTF("KarmaFuture.ttf", 28);
 	}
 	return isRun;
 }

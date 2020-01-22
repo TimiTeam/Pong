@@ -6,7 +6,9 @@
 enum eDirection{
 	NON,
 	UP,
-	DOWN
+	DOWN,
+	LEFT,
+	RIGHT
 };
 
 class AbstractPlayer

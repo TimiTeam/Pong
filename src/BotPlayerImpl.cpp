@@ -2,12 +2,10 @@
 
 BotPlayerImpl::BotPlayerImpl(float posX, float posY, int height, int width, Ball &ball) : AbstractPlayer(posX, posY, height, width), ball(ball)
 {
-	this->speed = 1;
 }
 
 BotPlayerImpl::BotPlayerImpl(std::string name, Ball &ball) : AbstractPlayer(name), ball(ball)
 {
-	this->speed = 1;
 }
 
 BotPlayerImpl::BotPlayerImpl(const BotPlayerImpl& src) : AbstractPlayer(src), ball(src.ball)
@@ -29,19 +27,12 @@ BotPlayerImpl& BotPlayerImpl::operator=(const BotPlayerImpl& src)
 void BotPlayerImpl::updateState(eDirection dir, int top, int bottom)
 {
 	(void)dir;
-	eDirection ballDir = ball.getDirections();
-	switch (ballDir)
-	{
-	case UP:
-		if (posY - speed > top)
+	float ballPosY = ball.getPosY();
+	if (ball.getDirections() == RIGHT){
+		bool random = rand() % 10 == 0;
+		if (random && ballPosY < posY &&  posY - speed > top)
 			setPosY(posY - speed);
-		break;
-	
-	case DOWN:
-		if (posY + height + speed < bottom)
+		else if (random && ballPosY > posY && ballPosY > posY + height && posY + height + speed < bottom)
 			setPosY(posY + speed);
-		break;
-	default:
-		break;
 	}
 }

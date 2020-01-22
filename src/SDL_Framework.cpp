@@ -63,14 +63,17 @@ SDL_Texture *SDL_Framework::createTextTexture(std::string str, int r, int g, int
 	SDL_Texture *result = NULL;
 	SDL_Surface *surf = NULL; 
 	if (font != NULL){
-		SDL_Color col = {r, g, b, 1};
+		SDL_Color col = {r, g, b, 0};
 		surf = TTF_RenderText_Solid(font, str.c_str(), col);
 		if (surf != NULL){
 			result = SDL_CreateTextureFromSurface(ren, surf);
+			SDL_FreeSurface(surf);
 		}
 		else
 			std::cout << "Can't create texture: "+std::string(TTF_GetError())+"\n";
 	}
+	else
+		std::cout << "Missing fond\n";
 	return result;
 }
 

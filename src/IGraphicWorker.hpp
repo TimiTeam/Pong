@@ -12,6 +12,7 @@ private:
 public:
 	virtual ~IGraphicWorker() {};
 	virtual bool initGame(const std::string title, int sizeX, int sizeY) = 0;
+	virtual void printBalckText(std::string text, int posX, int posY, int height, int width) = 0;
 	virtual bool isRunGame() = 0;
 	virtual void printMenu() = 0;
 	virtual bool isMultiplayerGame() = 0;

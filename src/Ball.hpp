@@ -8,20 +8,23 @@ class Ball
 {
 private:
     static Ball *ball;
-	int posX;
-	int posY;
-	int dirX;
-	int dirY;
+	float posX;
+	float posY;
+	float dirX;
+	float dirY;
+	float speed;
 	int height;
 	int width;
+	
 	Ball();
 	Ball(const Ball& src);
-	bool checkColision(AbstractPlayer &player);
+	bool checkColision(int posX1, int posY1, int height1, int width1, int posX2, int posY2, int hefight2, int width2);
+	void ricochetFromPlayer(AbstractPlayer &player);
 
 public:
 	~Ball();
 	Ball& operator=(const Ball& src);
-	AbstractPlayer *moveBall(int top, int bottom, int leftSide, int rightSide, AbstractPlayer &playerLeft, AbstractPlayer &playerRight);
+	void moveBall(int top, int bottom, int leftSide, int rightSide, AbstractPlayer &playerLeft, AbstractPlayer &playerRight);
 	eDirection getDirections();
 	int getPosX();
 	int getPosY();

@@ -35,6 +35,7 @@ public:
 	void updatePlayers();
 	void printMenu();
 	bool isMultiplayerGame();
+	void printBalckText(std::string text, int posX, int posY, int height, int width);
 	void setPlayerOnArrows(AbstractPlayer &player);
 	void setPlayerOnKeyboard(AbstractPlayer &player);
 	void drawPlayer(AbstractPlayer &player);
