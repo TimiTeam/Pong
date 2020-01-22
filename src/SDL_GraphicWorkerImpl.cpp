@@ -161,12 +161,12 @@ bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int siz
 }
 
 void SDL_GraphicWorkerImpl::drawPlayer(AbstractPlayer &player){
-	SDL_Rect rect = {player.getPosX(), player.getPosY(), player.getWidth(), player.getHeight()};
+	SDL_Rect rect = {static_cast<int>(player.getPosX()), static_cast<int>(player.getPosY()), player.getWidth(), player.getHeight()};
 	framework->drawTexture(playerTexture, NULL, &rect);
 }
 
 void SDL_GraphicWorkerImpl::drawBall(Ball &ball){
-	SDL_Rect rect = {ball.getPosX(), ball.getPosY(), ball.getWidth(), ball.getHeight()};
+	SDL_Rect rect = {static_cast<int>(ball.getPosX()), static_cast<int>(ball.getPosY()), ball.getWidth(), ball.getHeight()};
 	framework->drawTexture(ballTexture, NULL, &rect);
 	framework->setDrawColor(1, 1, 1);
 	framework->drawLine(winSizeX / 2, 0, winSizeX / 2, winSizeY);

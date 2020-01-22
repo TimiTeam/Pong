@@ -26,7 +26,7 @@ public:
 	bool setRenderTarget(SDL_Texture *target);
 	void renderPresent(SDL_Texture *text);
 	SDL_Texture *loadTexture(std::string path);
-	SDL_Texture *createTextTexture(std::string str, int r, int g, int b);
+	SDL_Texture *createTextTexture(std::string str, unsigned char r, unsigned char g, unsigned char b);
 	SDL_Texture *getMainTexture();
 	void setDrawColor(unsigned char r, unsigned  char g, unsigned char b);
 	void drawLine(int x1, int y1, int x2, int y2);

@@ -10,7 +10,7 @@ UserPlayerImpl::UserPlayerImpl(std::string name) : AbstractPlayer(name)
 	
 }
 
-UserPlayerImpl::UserPlayerImpl(const UserPlayerImpl& src)
+UserPlayerImpl::UserPlayerImpl(const UserPlayerImpl& src) : AbstractPlayer(src)
 {
 	*this = src;
 }

@@ -63,7 +63,7 @@ void SDL_Framework::drawRectArea(SDL_Rect *rect){
 	SDL_RenderDrawRect(ren, rect);
 }
 
-SDL_Texture *SDL_Framework::createTextTexture(std::string str, int r, int g, int b){
+SDL_Texture *SDL_Framework::createTextTexture(std::string str, unsigned char r, unsigned char g, unsigned char b){
 	SDL_Texture *result = NULL;
 	SDL_Surface *surf = NULL; 
 	if (font != NULL){
