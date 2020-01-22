@@ -21,7 +21,7 @@ private:
 public:
 	~Ball();
 	Ball& operator=(const Ball& src);
-	AbstractPlayer *moveBall(int top, int bottom, AbstractPlayer &playerLeft, AbstractPlayer &playerRight);
+	AbstractPlayer *moveBall(int top, int bottom, int leftSide, int rightSide, AbstractPlayer &playerLeft, AbstractPlayer &playerRight);
 	eDirection getDirections();
 	int getPosX();
 	int getPosY();

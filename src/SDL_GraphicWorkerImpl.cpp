@@ -25,6 +25,18 @@ SDL_GraphicWorkerImpl::~SDL_GraphicWorkerImpl()
 
 SDL_GraphicWorkerImpl& SDL_GraphicWorkerImpl::operator=(const SDL_GraphicWorkerImpl& src)
 {
+	if (this != &src){
+		this->winSizeX = src.winSizeX;
+		this->winSizeY = src.winSizeY;
+		this->framework = src.framework;
+		this->screen = src.screen;
+		this->playerTexture = src.playerTexture;
+		this->ballTexture = src.ballTexture;
+		this->isRun = src.isRun;
+		this->isMulti = src.isMulti;
+		this->playerArrow = src.playerArrow;
+		this->playerKeyboard = src.playerKeyboard;
+	}
 	return *this;
 }
 

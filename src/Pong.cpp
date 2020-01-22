@@ -28,7 +28,7 @@ Pong& Pong::operator=(const Pong& src)
 
 void Pong::setUpPlayer(AbstractPlayer &left, AbstractPlayer &right, Ball &ball){
 	int height = winSizeY / 10;
-	int width = winSizeX / 30;
+	int width = winSizeX / 40;
 	int posY = winSizeY / 2 - height;
 	
 	left.setPosX(0 + width * 2);
@@ -68,15 +68,15 @@ void Pong::runGame(){
 			playerTwo = PlayerFactory::getInstance().createPlayer(BOT, "Bot", ball);
 			gw.setPlayerOnArrows(*playerOne);
 			gw.setPlayerOnKeyboard(*playerTwo);
-			playerTwo->setSpeed(1);
+			playerTwo->setSpeed(1.05);
 		}
 		setUpPlayer(*playerOne, *playerTwo, ball);
 		while (isRun)
 		{
 			gw.clearScreen();
-			if (ball.moveBall(5, winSizeY - 5, *playerOne, *playerTwo) != NULL)
+			if (ball.moveBall(5, winSizeY - 5, 5, winSizeX - 5, *playerOne, *playerTwo) != NULL)
 			{
-				ball.setPosition(winSizeX / 2, winSizeY / 2);
+				ball.setPosition(winSizeX / 2 - ball.getWidth() / 2, winSizeY / 2 - ball.getHeight() / 2);
 			}
 			gw.drawPlayer(*playerOne);
 			gw.drawPlayer(*playerTwo);
@@ -86,7 +86,5 @@ void Pong::runGame(){
 			isRun = gw.isRunGame();
 		}
 	}
-	// delete [] playerOne;
-	// delete [] playerTwo;
 	gw.closeGame();
 }

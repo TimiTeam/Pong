@@ -7,14 +7,13 @@ AbstractPlayer::AbstractPlayer()
 
 AbstractPlayer::AbstractPlayer(std::string name) : name(name)
 {
-	speed = 10;
+	speed = 50;
 }
 
 
 AbstractPlayer::AbstractPlayer(float posX, float posY, int height, int width) : posX(posX), posY(posY), height(height), width(width)
 {
-	speed = 10;
-	score = 0;
+	speed = 20;
 }
 
 AbstractPlayer::AbstractPlayer(const AbstractPlayer& src)
@@ -29,6 +28,15 @@ AbstractPlayer::~AbstractPlayer()
 
 AbstractPlayer& AbstractPlayer::operator=(const AbstractPlayer& src)
 {
+	if (this != &src){
+		this->name = src.name;
+		this->posX = src.posX;
+		this->posY = src.posY;
+		this->height = src.height;
+		this->width = src.width;
+		this->speed = src.speed;
+		this->score = src.score;
+	}
 	return *this;
 }
 

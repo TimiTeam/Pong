@@ -14,8 +14,10 @@ enum ePlayerType{
 class PlayerFactory
 {
 private:
-	PlayerFactory();
 	static PlayerFactory *factory;
+
+	PlayerFactory();
+
 public:
 	PlayerFactory(const PlayerFactory& src);
 	~PlayerFactory();

@@ -22,6 +22,7 @@ UserPlayerImpl::~UserPlayerImpl()
 
 UserPlayerImpl& UserPlayerImpl::operator=(const UserPlayerImpl& src)
 {
+	AbstractPlayer::operator=(src);
 	return *this;
 }
 

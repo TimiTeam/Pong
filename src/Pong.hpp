@@ -9,9 +9,9 @@
 class Pong
 {
 private:
-	IGraphicWorker &gw;
 	int winSizeX;
 	int winSizeY;
+	IGraphicWorker &gw;
 	void setUpPlayer(AbstractPlayer &left, AbstractPlayer &right, Ball &ball);
 
 public:

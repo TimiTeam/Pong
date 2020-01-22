@@ -20,6 +20,7 @@ PlayerFactory::~PlayerFactory()
 
 PlayerFactory& PlayerFactory::operator=(const PlayerFactory& src)
 {
+	(void)src;
 	return *this;
 }
 
