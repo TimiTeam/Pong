@@ -13,6 +13,7 @@ private:
 	int winSizeY;
 	IGraphicWorker &gw;
 	void setUpPlayer(AbstractPlayer &left, AbstractPlayer &right, Ball &ball);
+	void drawMenu(AbstractPlayer **palyerLeft, AbstractPlayer **playerRight, Ball &ball);
 
 public:
 	Pong(int winSizeX, int winSizeY, IGraphicWorker &gw);

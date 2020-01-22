@@ -20,9 +20,6 @@ private:
 	AbstractPlayer *playerKeyboard;
 
 	SDL_GraphicWorkerImpl();
-	void makeKeysEvent(SDL_Keycode up, SDL_Keycode down, AbstractPlayer &playe);
-	void getPlayerInputArrows();
-	void getPlayerInputKeyboard();
 
 public:
 	SDL_GraphicWorkerImpl(const SDL_GraphicWorkerImpl& src);

@@ -46,37 +46,50 @@ void Pong::setUpPlayer(AbstractPlayer &left, AbstractPlayer &right, Ball &ball){
 	ball.setWidth(height / 2);
 }
 
+
+void Pong::drawMenu(AbstractPlayer **playerOne, AbstractPlayer **playerTwo, Ball &ball){
+		gw.printMenu();
+		*playerOne = PlayerFactory::getInstance().createPlayer(ALIVE, "Player 1", ball);
+		std::string text;
+
+		if (gw.isMultiplayerGame()){
+			*playerTwo = PlayerFactory::getInstance().createPlayer(ALIVE, "Player 2", ball);
+			gw.setPlayerOnKeyboard(**playerOne);
+			gw.setPlayerOnArrows(**playerTwo);
+			text = "Player left -> wsda. Player right -> arrows";
+		}
+		else{
+			*playerTwo = PlayerFactory::getInstance().createPlayer(BOT, "Bot", ball);
+			text = "Player left -> arrows. Player right -> bot";
+			gw.setPlayerOnArrows(**playerOne);
+			gw.setPlayerOnKeyboard(**playerTwo);
+			(*playerTwo)->setSpeed(10.f);
+		}
+		int textHeight = winSizeY / 8;
+		gw.clearScreen();
+		gw.printBalckText(text, 50, winSizeY / 2 - textHeight, textHeight, winSizeX - 100);
+		gw.updateScreen();
+		gw.delay(2);
+}
+
 void Pong::runGame(){
 	bool isRun = false;
-	bool isMultiplayer = false;
-	AbstractPlayer *playerOne;
-	AbstractPlayer *playerTwo;
 	int sum = 0;
-	if ((isRun = gw.initGame("Pong", winSizeX, winSizeY)) == false)
+	if (gw.initGame("Pong", winSizeX, winSizeY) == false)
 		std::cout << "Can't create game. Exit.\n";
 	else{
 		Ball &ball = Ball::getInstance();
-		gw.printMenu();
-		isMultiplayer = gw.isMultiplayerGame();
-		playerOne = PlayerFactory::getInstance().createPlayer(ALIVE, "Player 1", ball);
-		if (isMultiplayer){
-			playerTwo = PlayerFactory::getInstance().createPlayer(ALIVE, "Player 2", ball);
-			gw.setPlayerOnKeyboard(*playerOne);
-			gw.setPlayerOnArrows(*playerTwo);
-		}
-		else{
-			playerTwo = PlayerFactory::getInstance().createPlayer(BOT, "Bot", ball);
-			gw.setPlayerOnArrows(*playerOne);
-			gw.setPlayerOnKeyboard(*playerTwo);
-			playerTwo->setSpeed(10.f);
-		}
+		AbstractPlayer *playerOne = NULL;
+		AbstractPlayer *playerTwo = NULL;
+		drawMenu(&playerOne, &playerTwo, ball);
 		setUpPlayer(*playerOne, *playerTwo, ball);
-		int textWidth = winSizeX / 10;
+		int scoreWidth = winSizeX / 10;
+		isRun = gw.isRunGame();
 		while (isRun && sum != 20)
 		{
 			sum = playerOne->getScore() + playerTwo->getScore();
 			gw.clearScreen();
-			gw.printBalckText(std::to_string(playerOne->getScore()) + " / "+(std::to_string(playerTwo->getScore())), winSizeX / 2 - textWidth / 2, 5, winSizeY / 10, textWidth);
+			gw.printBalckText(std::to_string(playerOne->getScore()) + " / "+(std::to_string(playerTwo->getScore())), winSizeX / 2 - scoreWidth / 2, 5, winSizeY / 10, scoreWidth);
 			ball.moveBall(5, winSizeY - 5, 5, winSizeX - 5, *playerOne, *playerTwo);
 			gw.drawPlayer(*playerOne);
 			gw.drawPlayer(*playerTwo);
@@ -88,10 +101,10 @@ void Pong::runGame(){
 		if (sum == 20){
 			std::string message = playerOne->getScore() > playerTwo->getScore() ? playerOne->getName() : playerTwo->getName();
 			message += " Win!!";
-			int messWidth = winSizeX / 5;
+			int messWidth = winSizeX / 2;
 			int messHeight = winSizeY / 5;
 			gw.clearScreen();
-			gw.printBalckText(message, winSizeX / 2 - messWidth / 2, winSizeY / 2 - messHeight / 2, messHeight, messWidth);
+			gw.printBalckText(message, messWidth / 4, winSizeY / 2 - messHeight / 2, messHeight, messWidth);
 			gw.updateScreen();
 			gw.delay(3);
 		}

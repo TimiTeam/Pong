@@ -50,10 +50,8 @@ void SDL_GraphicWorkerImpl::printBalckText(std::string text, int posX, int posY,
 	if (texture == NULL){
 		std::cout << "Error: can't draw text\n";
 	}else{
-		framework->setRenderTarget(texture);
 		SDL_Rect rect = {posX, posY, width, height};
 		framework->drawTexture(texture, NULL, &rect);
-		framework->setRenderTarget(NULL);
 		SDL_DestroyTexture(texture);
 	}
 }
@@ -67,48 +65,84 @@ void SDL_GraphicWorkerImpl::setPlayerOnKeyboard(AbstractPlayer &player){
 }
 
 void SDL_GraphicWorkerImpl::printMenu(){
+	bool menuRun = true;
+	//bool upChice = true;
+	SDL_Event e;
 
-	isMulti = false;
+	std::string menuHeader = "Choose type";
+	std::string singl = "Player vs Bot";
+	std::string multi = "Player vs Player";
+
+	int headerSizeX = winSizeX / 2;
+	int headerSizeY = winSizeX / 4;
+	int typeSizeX = winSizeX / 3;
+	int typeSizeY = headerSizeY / 2;
+	SDL_Rect choice = {winSizeX / 2 - typeSizeX / 2 - 10 , 5 + headerSizeY - 5, typeSizeX + 20, typeSizeY + 10};
+
+	while (menuRun){
+		clearScreen();
+		printBalckText(menuHeader, winSizeX / 4, 5, headerSizeY, headerSizeX);
+		framework->setDrawColor(15, 130, 55);
+		framework->drawRectArea(&choice);
+		framework->setDrawColor(255,255,255);
+		printBalckText(singl, winSizeX / 2 - typeSizeX / 2, 5 + headerSizeY, typeSizeY, typeSizeX);
+		printBalckText(multi, winSizeX / 2 - typeSizeX / 2, 5 + headerSizeY + typeSizeY, typeSizeY, typeSizeX);
+		updateScreen();
+		while (SDL_PollEvent(&e)){
+			if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)){
+				menuRun = false;
+				isRun = false;
+			}else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
+			{
+				if (e.key.keysym.sym == SDLK_UP){
+					choice.y =  5 + headerSizeY - 5;
+					isMulti = false;
+				}
+				if (e.key.keysym.sym == SDLK_DOWN){
+					choice.y =  5 + headerSizeY + typeSizeY - 5;
+					isMulti = true;
+				}
+				if (e.key.keysym.sym == SDLK_RETURN){
+					menuRun = false;
+				}
+			}
+		}
+	}
 }
 
 bool SDL_GraphicWorkerImpl::isMultiplayerGame(){
 	return isMulti;
 }
 
-
-void SDL_GraphicWorkerImpl::makeKeysEvent(SDL_Keycode up, SDL_Keycode down, AbstractPlayer &player){
+void SDL_GraphicWorkerImpl::updatePlayers(){
 	SDL_Event	e;
-	eDirection result = NON;
+	eDirection resultKey = NON;
+	eDirection resultArrows = NON;
+
 	while (SDL_PollEvent(&e))
 	{
 		if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
 			isRun = false;
 		else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 		{
-			if (e.key.keysym.sym == up){
-				result = UP;
+			if (e.key.keysym.sym == SDLK_UP){
+				resultArrows = UP;
 			}
-			else if (e.key.keysym.sym == down){
-				result = DOWN;
+			if (e.key.keysym.sym == SDLK_DOWN){
+				resultArrows = DOWN;
+			}
+			if (e.key.keysym.sym == SDLK_w){
+				resultKey = UP;
+			}
+			if (e.key.keysym.sym == SDLK_s){
+				resultKey = DOWN;
 			}
 		}
 	}
-	player.updateState(result, 0, winSizeY);	
-}
-
-void SDL_GraphicWorkerImpl::getPlayerInputArrows(){
 	if (playerArrow != NULL)
-		makeKeysEvent(SDLK_UP, SDLK_DOWN, *playerArrow);
-}
-
-void SDL_GraphicWorkerImpl::getPlayerInputKeyboard(){
+		playerArrow->updateState(resultArrows, 0, winSizeY);
 	if (playerKeyboard != NULL)
-		makeKeysEvent(SDLK_w, SDLK_s, *playerKeyboard);
-}
-
-void SDL_GraphicWorkerImpl::updatePlayers(){
-	getPlayerInputArrows();
-	getPlayerInputKeyboard();
+		playerKeyboard->updateState(resultKey, 0, winSizeY);
 }
 
 bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int sizeY){
@@ -117,7 +151,6 @@ bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int siz
 	winSizeY = sizeY;
 	winSizeX = sizeX;
 	if (framework != NULL && framework->initSDL(title,  sizeX,  sizeY)){
-		screen = framework->getMainTexture();
 		isRun = true;
 		if (playerTexture == NULL)
 			playerTexture = framework->loadTexture("Racket.jpeg");
@@ -129,26 +162,23 @@ bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int siz
 }
 
 void SDL_GraphicWorkerImpl::drawPlayer(AbstractPlayer &player){
-	framework->setRenderTarget(screen);
 	SDL_Rect rect = {player.getPosX(), player.getPosY(), player.getWidth(), player.getHeight()};
 	framework->drawTexture(playerTexture, NULL, &rect);
-	framework->setRenderTarget(NULL);
 }
 
 void SDL_GraphicWorkerImpl::drawBall(Ball &ball){
-	framework->setRenderTarget(screen);
 	SDL_Rect rect = {ball.getPosX(), ball.getPosY(), ball.getWidth(), ball.getHeight()};
 	framework->drawTexture(ballTexture, NULL, &rect);
-	framework->setRenderTarget(NULL);
+	framework->setDrawColor(1, 1, 1);
+	framework->drawLine(winSizeX / 2, 0, winSizeX / 2, winSizeY);
 }
 
 void SDL_GraphicWorkerImpl::updateScreen(){
-	framework->drawTexture(screen, NULL, NULL);
 	framework->renderPresent(screen);
+	framework->setDrawColor(254, 254, 254);	
 }
 
 void SDL_GraphicWorkerImpl::clearScreen(){
-	framework->setRenderTarget(screen);
 	framework->clearScrean();
 }
 

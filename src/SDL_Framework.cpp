@@ -1,10 +1,11 @@
 #include "SDL_Framework.hpp"
 
+SDL_Texture *SDL_Framework::renderTexture = 0;
+
 SDL_Framework::SDL_Framework()
 {
 	win = NULL;
 	ren = NULL;
-	mainTexture = NULL;
 	font = NULL;
 }
 
@@ -25,7 +26,6 @@ SDL_Framework& SDL_Framework::operator=(const SDL_Framework& src)
 		this->win = src.win;
 		this->ren = src.ren;
 		this->font = src.font;
-		this->mainTexture = src.mainTexture;
 	}
 	return *this;
 }
@@ -59,11 +59,15 @@ bool SDL_Framework::loadTTF(std::string path, int size){
 	return true;
 }
 
+void SDL_Framework::drawRectArea(SDL_Rect *rect){
+	SDL_RenderDrawRect(ren, rect);
+}
+
 SDL_Texture *SDL_Framework::createTextTexture(std::string str, int r, int g, int b){
 	SDL_Texture *result = NULL;
 	SDL_Surface *surf = NULL; 
 	if (font != NULL){
-		SDL_Color col = {r, g, b, 0};
+		SDL_Color col = {r, g, b, SDL_ALPHA_OPAQUE};
 		surf = TTF_RenderText_Solid(font, str.c_str(), col);
 		if (surf != NULL){
 			result = SDL_CreateTextureFromSurface(ren, surf);
@@ -76,6 +80,17 @@ SDL_Texture *SDL_Framework::createTextTexture(std::string str, int r, int g, int
 		std::cout << "Missing fond\n";
 	return result;
 }
+
+
+void SDL_Framework::setDrawColor(unsigned char r, unsigned  char g, unsigned char b){
+	SDL_SetRenderDrawColor(ren, r, g, b, SDL_ALPHA_OPAQUE);
+}
+
+
+void SDL_Framework::drawLine(int x1, int y1, int x2, int y2){
+	SDL_RenderDrawLine(ren, x1, y1, x2, y2);
+}
+
 
 bool SDL_Framework::initSDL(const std::string title, int sizeX, int sizeY){
 	bool ret = true;
@@ -108,17 +123,9 @@ bool SDL_Framework::initSDL(const std::string title, int sizeX, int sizeY){
 					std::cout << "Can't init SDL IMG: "+std::string(IMG_GetError())+"\n";
                     ret = false;
                 }
-				else
-					mainTexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, sizeX, sizeY);
-				if (mainTexture == NULL){
-					std::cout << "Can't create main texture: "+std::string(SDL_GetError())+"\n";
+				if(TTF_Init() == -1){
 					ret = false;
-				}else
-				{
-					if(TTF_Init() == -1){
-						ret = false;
-						std::cout << "Can't init SDL TTF : "+std::string(TTF_GetError())+"\n";
-					}
+					std::cout << "Can't init SDL TTF : "+std::string(TTF_GetError())+"\n";
 				}
 			}
 		}
@@ -135,9 +142,9 @@ void SDL_Framework::close(){
     	SDL_DestroyWindow(win);
 		win = NULL;
 	}
-	if (mainTexture != NULL){
-		SDL_DestroyTexture(mainTexture);
-		mainTexture = NULL;
+	if (renderTexture != NULL){
+		SDL_DestroyTexture(renderTexture);
+		renderTexture = NULL;
 	}
 	TTF_Quit();
     IMG_Quit();
@@ -161,5 +168,6 @@ void SDL_Framework::renderPresent(SDL_Texture *text){
 }
 
 SDL_Texture *SDL_Framework::getMainTexture(){
-	return mainTexture;
+	renderTexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, sizeX, sizeY);
+	return renderTexture;
 }
