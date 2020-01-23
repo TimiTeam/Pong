@@ -106,18 +106,15 @@ void SDL_GraphicWorkerImpl::printMenu()
 			}
 			else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 			{
-				if (e.key.keysym.sym == SDLK_UP)
-				{
+				if (e.key.keysym.sym == SDLK_UP){
 					choice.y = 5 + headerSizeY - 5;
 					isMulti = false;
 				}
-				if (e.key.keysym.sym == SDLK_DOWN)
-				{
+				if (e.key.keysym.sym == SDLK_DOWN){
 					choice.y = 5 + headerSizeY + typeSizeY - 5;
 					isMulti = true;
 				}
-				if (e.key.keysym.sym == SDLK_RETURN)
-				{
+				if (e.key.keysym.sym == SDLK_RETURN){
 					menuRun = false;
 				}
 				
@@ -146,10 +143,11 @@ void SDL_GraphicWorkerImpl::getUserInput(){
 
 void SDL_GraphicWorkerImpl::updatePlayers()
 {
-	int top = playerArrow->getHeight() / 4;
+	int top = 0;
 	int bottom = winSizeY - top;
 
 	eDirection dirArrows = hooksEvent[SDLK_UP] ==  SDL_KEYDOWN ? UP : hooksEvent[SDLK_DOWN] == SDL_KEYDOWN ? DOWN : NON;
+	
 	playerArrow->updateState(dirArrows, top, bottom);
 
 	if (!isMulti){

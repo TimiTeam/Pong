@@ -28,11 +28,12 @@ Pong &Pong::operator=(const Pong &src)
 
 void Pong::setUpPlayer(AbstractPlayer &left, AbstractPlayer &right, Ball &ball)
 {
-	int height = winSizeY / 10;
+	int height = winSizeY / 8;
 	int width = winSizeX / 40;
 	int posY = winSizeY / 2 - height / 2;
+	float playerStep = winSizeY / 12;
 
-	left.setPosX(0 + width * 2);
+	left.setPosX(width * 2);
 	left.setPosY(posY);
 	left.setHeight(height);
 	left.setWidth(width);
@@ -45,6 +46,9 @@ void Pong::setUpPlayer(AbstractPlayer &left, AbstractPlayer &right, Ball &ball)
 	ball.setPosition(winSizeX / 2 - height / 2, winSizeY / 2 - height / 2);
 	ball.setHeight(height / 2);
 	ball.setWidth(height / 2);
+	left.setSpeed(playerStep);
+	right.setSpeed(playerStep);
+	ball.setSpeed(10);
 }
 
 void Pong::drawMenu(AbstractPlayer **playerOne, AbstractPlayer **playerTwo)
@@ -84,11 +88,8 @@ void Pong::runGame()
 		AbstractPlayer *playerTwo = NULL;
 		drawMenu(&playerOne, &playerTwo);
 		setUpPlayer(*playerOne, *playerTwo, ball);
-		playerOne->setSpeed(80);
-		playerTwo->setSpeed(80);
-		ball.setSpeed(10);
 
-		int sum = 0;
+		bool win = false;
 		bool isRun = gw.isRunGame();
 		int scoreWidth = winSizeX / 10;
 		int scoreHeight = scoreWidth / 2;
@@ -97,14 +98,15 @@ void Pong::runGame()
 		const double mmPerSecond = 1.0 / 60.0;
 		auto start = std::chrono::system_clock::now();
 		gw.initFPS();
-		while (isRun && sum != 20 && playerOne->getScore() < 11 && playerTwo->getScore() < 11)
+		while (isRun && !win)
 		{
 			auto end = std::chrono::system_clock::now();
 			std::chrono::duration<double> elapsed_seconds = end - start;
 			start = end;
 			lag += elapsed_seconds.count();
 			gw.clearScreen();
-			sum = playerOne->getScore() + playerTwo->getScore();
+			if(playerOne->getScore() > 10 || playerTwo->getScore() > 10)
+				win = true;
 			gw.getUserInput();
 			gw.updatePlayers();
 			while (lag >= mmPerSecond)
@@ -121,11 +123,9 @@ void Pong::runGame()
 			gw.drawBall(ball);
 			gw.updateScreen();
 			isRun = gw.isRunGame();
-			//gw.delay(30);
 			fps = gw.getFPS();
 		}
-		if (sum == 20)
-		{
+		if (win){
 			std::string message = playerOne->getScore() > playerTwo->getScore() ? playerOne->getName() : playerTwo->getName();
 			message += " Win!!";
 			int messWidth = winSizeX / 2;

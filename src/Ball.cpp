@@ -63,16 +63,16 @@ void Ball::ricochetFromPlayer(AbstractPlayer &check){
 	int playerPosY = check.getPosY();
 	int ballCenter = posY + height / 2;
 
-	if (posY + height > playerPosY && ballCenter < playerPosY + part){
-		dirY = -1.f;
+	if (posY + height >= playerPosY && ballCenter < playerPosY + part){
+		dirY = -1.1f;
 	}
 	else if (ballCenter >= playerPosY + part && ballCenter <= playerPosY + check.getHeight() - part){
-		dirY = 0;
+		dirY = 0.f;
 	}
-	else if (ballCenter > playerPosY + check.getHeight() - part && posY < playerPosY + check.getHeight()){
-		dirY = 1.1;
+	else if (ballCenter > playerPosY + check.getHeight() - part && posY <= playerPosY + check.getHeight()){
+		dirY = 1.1f;
 	}
-	dirX *= -1;
+	dirX *= -1.f;
 }
 
 void Ball::moveBall(int top, int bottom, int leftSide, int rightSide, AbstractPlayer &playerLeft, AbstractPlayer &playerRight){

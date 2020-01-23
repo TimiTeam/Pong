@@ -24,7 +24,7 @@ private:
 	Uint32 frametimes[FRAME_VALUES];
 	Uint32 frametimelast;
 	Uint32 framecount;
-	long long framespersecond;
+	float framespersecond;
 	AbstractPlayer *playerArrow;
 	AbstractPlayer *playerKeyboard;
 
