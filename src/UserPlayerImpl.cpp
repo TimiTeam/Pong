@@ -30,12 +30,16 @@ void UserPlayerImpl::updateState(eDirection dir, int top, int bottom){
 	switch (dir){
 	case UP:
 		if (posY - speed > top)
-			setPosY(posY - speed);
+			posY -= speed;
+		else
+			posY = top;
 		break;
 	
 	case DOWN:
 		if (posY + height + speed < bottom)
-			setPosY(posY + speed);
+			posY += speed;
+		else
+			posY = bottom - height;
 		break;
 	default:
 		break;

@@ -53,22 +53,18 @@ void Pong::drawMenu(AbstractPlayer **playerOne, AbstractPlayer **playerTwo)
 	*playerOne = PlayerFactory::getInstance().createPlayer(ALIVE, "Player 1");
 	std::string text;
 
-	if (gw.isMultiplayerGame())
-	{
+	if (gw.isMultiplayerGame()){
 		*playerTwo = PlayerFactory::getInstance().createPlayer(ALIVE, "Player 2");
 		gw.setPlayerOnKeyboard(**playerOne);
 		gw.setPlayerOnArrows(**playerTwo);
 		text = "Player left -> wsda. Player right -> arrows";
-	}
-	else
-	{
+	}else{
 		*playerTwo = PlayerFactory::getInstance().createPlayer(BOT, "Bot");
 		text = "Player left -> arrows. Player right -> bot";
 		gw.setPlayerOnArrows(**playerOne);
 		gw.setPlayerOnKeyboard(**playerTwo);
 	}
-	if (gw.isRunGame())
-	{
+	if (gw.isRunGame()){
 		int textHeight = winSizeY / 8;
 		gw.clearScreen();
 		gw.printBalckText(text, 50, winSizeY / 2 - textHeight, textHeight, winSizeX - 100);
@@ -88,8 +84,8 @@ void Pong::runGame()
 		AbstractPlayer *playerTwo = NULL;
 		drawMenu(&playerOne, &playerTwo);
 		setUpPlayer(*playerOne, *playerTwo, ball);
-		playerOne->setSpeed(60);
-		playerTwo->setSpeed(60);
+		playerOne->setSpeed(80);
+		playerTwo->setSpeed(80);
 		ball.setSpeed(10);
 
 		int sum = 0;
@@ -101,7 +97,7 @@ void Pong::runGame()
 		const double mmPerSecond = 1.0 / 60.0;
 		auto start = std::chrono::system_clock::now();
 		gw.initFPS();
-		while (isRun && sum != 20)
+		while (isRun && sum != 20 && playerOne->getScore() < 11 && playerTwo->getScore() < 11)
 		{
 			auto end = std::chrono::system_clock::now();
 			std::chrono::duration<double> elapsed_seconds = end - start;
@@ -115,7 +111,7 @@ void Pong::runGame()
 			{
 				gw.getUserInput();
 				gw.updatePlayers();
-				ball.moveBall(5, winSizeY - 5, 5, winSizeX - 5, *playerOne, *playerTwo);
+				ball.moveBall(0, winSizeY, 0, winSizeX, *playerOne, *playerTwo);
 				lag -= mmPerSecond;
 			}
 			gw.printBalckText(std::to_string(fps), 5, 5, 100, 150);
@@ -125,7 +121,7 @@ void Pong::runGame()
 			gw.drawBall(ball);
 			gw.updateScreen();
 			isRun = gw.isRunGame();
-			//gw.delay(10);
+			//gw.delay(30);
 			fps = gw.getFPS();
 		}
 		if (sum == 20)

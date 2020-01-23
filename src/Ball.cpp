@@ -81,7 +81,7 @@ void Ball::moveBall(int top, int bottom, int leftSide, int rightSide, AbstractPl
 	(void)leftSide;
 
 	if (posY + dirY <= top || posY + height + dirY >= bottom){
-		dirY *= -1;
+		dirY *= -1.1;
 	}
 	if (posX <= playerLeft.getPosX()){
 		playerRight.incrementScore();
@@ -92,13 +92,13 @@ void Ball::moveBall(int top, int bottom, int leftSide, int rightSide, AbstractPl
 		goal = true;
 	}
 	if (getDirections() == LEFT && !goal){
-		if (checkColision(posX + (dirX * speed), posY + (dirY * speed), height, 0, playerLeft.getPosX(), playerLeft.getPosY(), playerLeft.getHeight(), playerLeft.getWidth())){
+		if (checkColision(posX + (dirX * speed), posY + (dirY * speed), height, width, playerLeft.getPosX(), playerLeft.getPosY(), playerLeft.getHeight(), playerLeft.getWidth())){
 			ricochetFromPlayer(playerLeft);
 			speed += cofUpperSpeed;
 		}
 	}
 	else if (!goal){
-		if (checkColision(posX + (dirX * speed), posY + (dirY * speed), height, width, playerRight.getPosX(), playerRight.getPosY(), playerRight.getHeight(), 0)){
+		if (checkColision(posX + (dirX * speed), posY + (dirY * speed), height, width, playerRight.getPosX(), playerRight.getPosY(), playerRight.getHeight(), playerRight.getWidth())){
 			ricochetFromPlayer(playerRight);
 			speed += cofUpperSpeed;
 		}

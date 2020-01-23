@@ -146,15 +146,20 @@ void SDL_GraphicWorkerImpl::getUserInput(){
 
 void SDL_GraphicWorkerImpl::updatePlayers()
 {
-	playerArrow->updateState(hooksEvent[SDLK_UP] != 0 ? UP : NON, 0, winSizeY);
-	playerArrow->updateState(hooksEvent[SDLK_DOWN] != 0 ? DOWN : NON, 0, winSizeY);
-	if (!isMulti){
-		playerKeyboard->updateState(NON,  0, winSizeY);
-	}else{
-		playerKeyboard->updateState(hooksEvent[SDLK_w] != 0 ? UP : NON, 0, winSizeY);
-		playerKeyboard->updateState(hooksEvent[SDLK_s] != 0 ? DOWN : NON, 0, winSizeY);
-	}
+	int top = playerArrow->getHeight() / 4;
+	int bottom = winSizeY - top;
 
+	eDirection dirArrows = hooksEvent[SDLK_UP] ==  SDL_KEYDOWN ? UP : hooksEvent[SDLK_DOWN] == SDL_KEYDOWN ? DOWN : NON;
+	playerArrow->updateState(dirArrows, top, bottom);
+
+	if (!isMulti){
+		playerKeyboard->updateState(NON, top, bottom);
+
+	}else{
+		eDirection dirKey = hooksEvent[SDLK_w] ==  SDL_KEYDOWN ? UP : hooksEvent[SDLK_s] == SDL_KEYDOWN ? DOWN : NON;
+		playerKeyboard->updateState(dirKey, top, bottom);
+		
+	}
 	hooksEvent.clear();
 }
 
@@ -194,7 +199,6 @@ void SDL_GraphicWorkerImpl::updateScreen()
 {
 	framework->renderPresent(screen);
 	framework->setDrawColor(254, 254, 254);
-	hooksEvent.clear();
 }
 
 void SDL_GraphicWorkerImpl::clearScreen()

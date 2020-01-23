@@ -37,10 +37,18 @@ void BotPlayerImpl::updateState(eDirection dir, int top, int bottom)
 		start = end;
 		float ballPosY = ball.getPosY();
 		if (ball.getDirections() == RIGHT){
-			if  (ballPosY < posY &&  posY - speed > top)
-				setPosY(posY - speed);
-			else if (ballPosY > posY && ballPosY > posY + height && posY + height + speed < bottom)
-				setPosY(posY + speed);
+			if  (ballPosY < posY){
+				if (posY - speed > top)
+					posY -= speed;
+				else
+					posY = top;
+			}
+			else if (ballPosY > posY && ballPosY > posY + height){
+				if (posY + height + speed < bottom)
+					posY += speed;
+				else
+					posY = bottom - height;	
+			}
 		}
 	}
 }

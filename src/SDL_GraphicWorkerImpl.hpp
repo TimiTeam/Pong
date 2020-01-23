@@ -52,7 +52,7 @@ public:
 	void updateScreen();
 	void closeGame();
 	void initFPS();
-	int getFPS();
+	int  getFPS();
 	void delay(int mSec);
 	void getUserInput();
 	// --------------
