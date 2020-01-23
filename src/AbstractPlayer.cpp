@@ -7,14 +7,12 @@ AbstractPlayer::AbstractPlayer()
 
 AbstractPlayer::AbstractPlayer(std::string name) : name(name)
 {
-	//speed = 50;
 	score = 0;
 }
 
 
 AbstractPlayer::AbstractPlayer(float posX, float posY, int height, int width) : posX(posX), posY(posY), height(height), width(width)
 {
-	//speed = 20;
 	score = 0;
 }
 

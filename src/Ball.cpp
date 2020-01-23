@@ -81,7 +81,7 @@ void Ball::moveBall(int top, int bottom, int leftSide, int rightSide, AbstractPl
 	(void)leftSide;
 
 	if (posY + dirY <= top || posY + height + dirY >= bottom){
-		dirY *= -1.f;
+		dirY *= -1;
 	}
 	if (posX <= playerLeft.getPosX()){
 		playerRight.incrementScore();

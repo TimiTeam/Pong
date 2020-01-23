@@ -79,8 +79,6 @@ void Pong::drawMenu(AbstractPlayer **playerOne, AbstractPlayer **playerTwo)
 
 void Pong::runGame()
 {
-	bool isRun = false;
-	int sum = 0;
 	if (gw.initGame("Pong", winSizeX, winSizeY) == false)
 		std::cout << "Can't create game. Exit.\n";
 	else
@@ -90,41 +88,45 @@ void Pong::runGame()
 		AbstractPlayer *playerTwo = NULL;
 		drawMenu(&playerOne, &playerTwo);
 		setUpPlayer(*playerOne, *playerTwo, ball);
+		playerOne->setSpeed(60);
+		playerTwo->setSpeed(60);
+		ball.setSpeed(10);
+
+		int sum = 0;
+		bool isRun = gw.isRunGame();
 		int scoreWidth = winSizeX / 10;
 		int scoreHeight = scoreWidth / 2;
-		isRun = gw.isRunGame();
 		int fps;
-		playerOne->setSpeed(50);
-		playerTwo->setSpeed(50);
-		ball.setSpeed(10);
 		double lag = 0.0;
 		const double mmPerSecond = 1.0 / 60.0;
+		auto start = std::chrono::system_clock::now();
 		gw.initFPS();
 		while (isRun && sum != 20)
 		{
-			auto start = std::chrono::system_clock::now();
-			sum = playerOne->getScore() + playerTwo->getScore();
-			gw.clearScreen();
-			gw.printBalckText(std::to_string(playerOne->getScore()) + " / " + (std::to_string(playerTwo->getScore())), winSizeX / 2 - scoreWidth / 2, 5, scoreHeight, scoreWidth);
-
 			auto end = std::chrono::system_clock::now();
 			std::chrono::duration<double> elapsed_seconds = end - start;
+			start = end;
 			lag += elapsed_seconds.count();
+			gw.clearScreen();
+			sum = playerOne->getScore() + playerTwo->getScore();
 			gw.getUserInput();
 			gw.updatePlayers();
 			while (lag >= mmPerSecond)
 			{
+				gw.getUserInput();
 				gw.updatePlayers();
 				ball.moveBall(5, winSizeY - 5, 5, winSizeX - 5, *playerOne, *playerTwo);
 				lag -= mmPerSecond;
 			}
-			fps = gw.getFPS();
 			gw.printBalckText(std::to_string(fps), 5, 5, 100, 150);
+			gw.printBalckText(std::to_string(playerOne->getScore()) + " / " + (std::to_string(playerTwo->getScore())), winSizeX / 2 - scoreWidth / 2, 5, scoreHeight, scoreWidth);
 			gw.drawPlayer(*playerOne);
 			gw.drawPlayer(*playerTwo);
 			gw.drawBall(ball);
 			gw.updateScreen();
 			isRun = gw.isRunGame();
+			//gw.delay(10);
+			fps = gw.getFPS();
 		}
 		if (sum == 20)
 		{

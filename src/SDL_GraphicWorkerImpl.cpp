@@ -154,6 +154,8 @@ void SDL_GraphicWorkerImpl::updatePlayers()
 		playerKeyboard->updateState(hooksEvent[SDLK_w] != 0 ? UP : NON, 0, winSizeY);
 		playerKeyboard->updateState(hooksEvent[SDLK_s] != 0 ? DOWN : NON, 0, winSizeY);
 	}
+
+	hooksEvent.clear();
 }
 
 bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int sizeY)

@@ -32,7 +32,7 @@ void BotPlayerImpl::updateState(eDirection dir, int top, int bottom)
 	auto end = std::chrono::system_clock::now();
 
 	std::chrono::duration<double> diff = end - start; 
-	if (diff.count() > 0.04)
+	if (diff.count() > 0.05)
 	{
 		start = end;
 		float ballPosY = ball.getPosY();
