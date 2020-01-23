@@ -4,10 +4,15 @@
 # include <iostream>
 # include "IGraphicWorker.hpp"
 # include "SDL_Framework.hpp"
+# include <map>
+
+# define FRAME_VALUES 10
+
 class SDL_GraphicWorkerImpl : public IGraphicWorker 
 {
 private: 
 	static SDL_GraphicWorkerImpl *selfGW;
+	std::map<SDL_Keycode, Uint32> hooksEvent;
 	int winSizeX;
 	int winSizeY;
 	SDL_Framework *framework;
@@ -16,6 +21,10 @@ private:
 	SDL_Texture	*ballTexture;
 	bool isRun;
 	bool isMulti;
+	Uint32 frametimes[FRAME_VALUES];
+	Uint32 frametimelast;
+	Uint32 framecount;
+	long long framespersecond;
 	AbstractPlayer *playerArrow;
 	AbstractPlayer *playerKeyboard;
 
@@ -25,6 +34,8 @@ public:
 	SDL_GraphicWorkerImpl(const SDL_GraphicWorkerImpl& src);
 	~SDL_GraphicWorkerImpl();
 	SDL_GraphicWorkerImpl& operator=(const SDL_GraphicWorkerImpl& src);
+
+	static SDL_GraphicWorkerImpl &getInstance();
 
 	// IGraphicWorker
 	bool initGame(const std::string title, int sizeX, int sizeY);
@@ -40,8 +51,10 @@ public:
 	void clearScreen();
 	void updateScreen();
 	void closeGame();
-	void delay(int sec);
-	static SDL_GraphicWorkerImpl &getInstance();
+	void initFPS();
+	int getFPS();
+	void delay(int mSec);
+	void getUserInput();
 	// --------------
 };
 #endif

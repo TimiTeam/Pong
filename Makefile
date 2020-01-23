@@ -20,7 +20,7 @@ OBJS := $(SRCS:.cpp=.o)
 OBJS := $(addprefix $(DIR_OBJ)/, $(OBJS))
 SRCS := $(addprefix $(DIR_SRC)/, $(SRCS))
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -std=c++14
 
 ifeq ($(UNAME_S),Darwin)
 	CC :=			clang++

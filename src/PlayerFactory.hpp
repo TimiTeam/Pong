@@ -23,6 +23,6 @@ public:
 	~PlayerFactory();
 	PlayerFactory& operator=(const PlayerFactory& src);
 	static PlayerFactory& getInstance();
-	AbstractPlayer *createPlayer(ePlayerType tyep, std::string name, Ball &ball);
+	AbstractPlayer *createPlayer(ePlayerType tyep, std::string name);
 };
 #endif

@@ -13,6 +13,7 @@ private:
 	float dirX;
 	float dirY;
 	float speed;
+	float cofUpperSpeed;
 	int height;
 	int width;
 	
@@ -33,6 +34,7 @@ public:
 	void setHeight(int height);
 	void setWidth(int width);
 	void setPosition(int x, int y);
+	void setSpeed(float speed);
 	static Ball& getInstance();
 };
 #endif

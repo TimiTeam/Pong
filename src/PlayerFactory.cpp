@@ -30,7 +30,7 @@ PlayerFactory &PlayerFactory::getInstance(){
 	return *factory;
 }
 
-AbstractPlayer *PlayerFactory::createPlayer(ePlayerType type, std::string name, Ball &ball){
+AbstractPlayer *PlayerFactory::createPlayer(ePlayerType type, std::string name){
 	AbstractPlayer *ret;
 
 	switch (type)
@@ -39,7 +39,7 @@ AbstractPlayer *PlayerFactory::createPlayer(ePlayerType type, std::string name, 
 		ret = new UserPlayerImpl(name);
 		break;
 	case BOT:
-		ret = new BotPlayerImpl(name, ball);
+		ret = new BotPlayerImpl(name, Ball::getInstance());
 		break ;
 	default:
 		break;

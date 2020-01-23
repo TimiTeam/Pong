@@ -12,7 +12,7 @@ SDL_GraphicWorkerImpl::SDL_GraphicWorkerImpl()
 	screen = NULL;
 }
 
-SDL_GraphicWorkerImpl::SDL_GraphicWorkerImpl(const SDL_GraphicWorkerImpl& src)
+SDL_GraphicWorkerImpl::SDL_GraphicWorkerImpl(const SDL_GraphicWorkerImpl &src)
 {
 	*this = src;
 }
@@ -20,12 +20,13 @@ SDL_GraphicWorkerImpl::SDL_GraphicWorkerImpl(const SDL_GraphicWorkerImpl& src)
 SDL_GraphicWorkerImpl::~SDL_GraphicWorkerImpl()
 {
 	closeGame();
-	delete [] framework;
+	delete[] framework;
 }
 
-SDL_GraphicWorkerImpl& SDL_GraphicWorkerImpl::operator=(const SDL_GraphicWorkerImpl& src)
+SDL_GraphicWorkerImpl &SDL_GraphicWorkerImpl::operator=(const SDL_GraphicWorkerImpl &src)
 {
-	if (this != &src){
+	if (this != &src)
+	{
 		this->winSizeX = src.winSizeX;
 		this->winSizeY = src.winSizeY;
 		this->framework = src.framework;
@@ -40,31 +41,38 @@ SDL_GraphicWorkerImpl& SDL_GraphicWorkerImpl::operator=(const SDL_GraphicWorkerI
 	return *this;
 }
 
-bool SDL_GraphicWorkerImpl::isRunGame(){
+bool SDL_GraphicWorkerImpl::isRunGame()
+{
 	return isRun;
 }
 
-
-void SDL_GraphicWorkerImpl::printBalckText(std::string text, int posX, int posY, int height, int width){
+void SDL_GraphicWorkerImpl::printBalckText(std::string text, int posX, int posY, int height, int width)
+{
 	SDL_Texture *texture = framework->createTextTexture(text, 0, 0, 0);
-	if (texture == NULL){
+	if (texture == NULL)
+	{
 		std::cout << "Error: can't draw text\n";
-	}else{
+	}
+	else
+	{
 		SDL_Rect rect = {posX, posY, width, height};
 		framework->drawTexture(texture, NULL, &rect);
 		SDL_DestroyTexture(texture);
 	}
 }
 
-void SDL_GraphicWorkerImpl::setPlayerOnArrows(AbstractPlayer &player){
+void SDL_GraphicWorkerImpl::setPlayerOnArrows(AbstractPlayer &player)
+{
 	playerArrow = &player;
 }
 
-void SDL_GraphicWorkerImpl::setPlayerOnKeyboard(AbstractPlayer &player){
+void SDL_GraphicWorkerImpl::setPlayerOnKeyboard(AbstractPlayer &player)
+{
 	playerKeyboard = &player;
 }
 
-void SDL_GraphicWorkerImpl::printMenu(){
+void SDL_GraphicWorkerImpl::printMenu()
+{
 	bool menuRun = true;
 	SDL_Event e;
 
@@ -76,80 +84,86 @@ void SDL_GraphicWorkerImpl::printMenu(){
 	int headerSizeY = winSizeX / 4;
 	int typeSizeX = winSizeX / 3;
 	int typeSizeY = headerSizeY / 2;
-	SDL_Rect choice = {winSizeX / 2 - typeSizeX / 2 - 10 , 5 + headerSizeY - 5, typeSizeX + 20, typeSizeY + 10};
+	SDL_Rect choice = {winSizeX / 2 - typeSizeX / 2 - 10, 5 + headerSizeY - 5, typeSizeX + 20, typeSizeY + 10};
 
-	while (menuRun){
+	isMulti = false;
+	while (menuRun)
+	{
 		clearScreen();
 		printBalckText(menuHeader, winSizeX / 4, 5, headerSizeY, headerSizeX);
 		framework->setDrawColor(15, 130, 55);
 		framework->drawRectArea(&choice);
-		framework->setDrawColor(255,255,255);
+		framework->setDrawColor(255, 255, 255);
 		printBalckText(singl, winSizeX / 2 - typeSizeX / 2, 5 + headerSizeY, typeSizeY, typeSizeX);
 		printBalckText(multi, winSizeX / 2 - typeSizeX / 2, 5 + headerSizeY + typeSizeY, typeSizeY, typeSizeX);
 		updateScreen();
-		while (SDL_PollEvent(&e)){
-			if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)){
+		while (SDL_PollEvent(&e))
+		{
+			if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
+			{
 				menuRun = false;
 				isRun = false;
-			}else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
+			}
+			else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 			{
-				if (e.key.keysym.sym == SDLK_UP){
-					choice.y =  5 + headerSizeY - 5;
+				if (e.key.keysym.sym == SDLK_UP)
+				{
+					choice.y = 5 + headerSizeY - 5;
 					isMulti = false;
 				}
-				if (e.key.keysym.sym == SDLK_DOWN){
-					choice.y =  5 + headerSizeY + typeSizeY - 5;
+				if (e.key.keysym.sym == SDLK_DOWN)
+				{
+					choice.y = 5 + headerSizeY + typeSizeY - 5;
 					isMulti = true;
 				}
-				if (e.key.keysym.sym == SDLK_RETURN){
+				if (e.key.keysym.sym == SDLK_RETURN)
+				{
 					menuRun = false;
 				}
+				
 			}
 		}
 	}
 }
 
-bool SDL_GraphicWorkerImpl::isMultiplayerGame(){
+bool SDL_GraphicWorkerImpl::isMultiplayerGame()
+{
 	return isMulti;
 }
 
-void SDL_GraphicWorkerImpl::updatePlayers(){
-	SDL_Event	e;
-	eDirection resultKey = NON;
-	eDirection resultArrows = NON;
+void SDL_GraphicWorkerImpl::getUserInput(){
+	SDL_Event e;
 
 	while (SDL_PollEvent(&e))
 	{
 		if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
 			isRun = false;
-		else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
-		{
-			if (e.key.keysym.sym == SDLK_UP){
-				resultArrows = UP;
-			}
-			if (e.key.keysym.sym == SDLK_DOWN){
-				resultArrows = DOWN;
-			}
-			if (e.key.keysym.sym == SDLK_w){
-				resultKey = UP;
-			}
-			if (e.key.keysym.sym == SDLK_s){
-				resultKey = DOWN;
-			}
+		else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP){
+			hooksEvent[e.key.keysym.sym] = e.type;
 		}
 	}
-	if (playerArrow != NULL)
-		playerArrow->updateState(resultArrows, 0, winSizeY);
-	if (playerKeyboard != NULL)
-		playerKeyboard->updateState(resultKey, 0, winSizeY);
 }
 
-bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int sizeY){
+void SDL_GraphicWorkerImpl::updatePlayers()
+{
+	playerArrow->updateState(hooksEvent[SDLK_UP] != 0 ? UP : NON, 0, winSizeY);
+	playerArrow->updateState(hooksEvent[SDLK_DOWN] != 0 ? DOWN : NON, 0, winSizeY);
+	if (!isMulti){
+		playerKeyboard->updateState(NON,  0, winSizeY);
+	}else{
+		playerKeyboard->updateState(hooksEvent[SDLK_w] != 0 ? UP : NON, 0, winSizeY);
+		playerKeyboard->updateState(hooksEvent[SDLK_s] != 0 ? DOWN : NON, 0, winSizeY);
+	}
+}
+
+bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int sizeY)
+{
 	isRun = false;
-	
+
 	winSizeY = sizeY;
 	winSizeX = sizeX;
-	if (framework != NULL && framework->initSDL(title,  sizeX,  sizeY)){
+	if (framework != NULL && framework->initSDL(title, sizeX, sizeY))
+	{
 		isRun = true;
 		if (playerTexture == NULL)
 			playerTexture = framework->loadTexture("Racket.jpeg");
@@ -160,49 +174,94 @@ bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int siz
 	return isRun;
 }
 
-void SDL_GraphicWorkerImpl::drawPlayer(AbstractPlayer &player){
+void SDL_GraphicWorkerImpl::drawPlayer(AbstractPlayer &player)
+{
 	SDL_Rect rect = {static_cast<int>(player.getPosX()), static_cast<int>(player.getPosY()), player.getWidth(), player.getHeight()};
 	framework->drawTexture(playerTexture, NULL, &rect);
 }
 
-void SDL_GraphicWorkerImpl::drawBall(Ball &ball){
+void SDL_GraphicWorkerImpl::drawBall(Ball &ball)
+{
 	SDL_Rect rect = {static_cast<int>(ball.getPosX()), static_cast<int>(ball.getPosY()), ball.getWidth(), ball.getHeight()};
 	framework->drawTexture(ballTexture, NULL, &rect);
 	framework->setDrawColor(1, 1, 1);
 	framework->drawLine(winSizeX / 2, 0, winSizeX / 2, winSizeY);
 }
 
-void SDL_GraphicWorkerImpl::updateScreen(){
+void SDL_GraphicWorkerImpl::updateScreen()
+{
 	framework->renderPresent(screen);
-	framework->setDrawColor(254, 254, 254);	
+	framework->setDrawColor(254, 254, 254);
+	hooksEvent.clear();
 }
 
-void SDL_GraphicWorkerImpl::clearScreen(){
+void SDL_GraphicWorkerImpl::clearScreen()
+{
 	framework->clearScrean();
 }
 
-void SDL_GraphicWorkerImpl::closeGame(){
-	if (screen != NULL){
+void SDL_GraphicWorkerImpl::closeGame()
+{
+	if (screen != NULL)
+	{
 		SDL_DestroyTexture(screen);
 		screen = NULL;
 	}
-	if (ballTexture != NULL){
+	if (ballTexture != NULL)
+	{
 		SDL_DestroyTexture(ballTexture);
 		ballTexture = NULL;
 	}
-	if (playerTexture != NULL){
+	if (playerTexture != NULL)
+	{
 		SDL_DestroyTexture(playerTexture);
 		playerTexture = NULL;
 	}
 	framework->close();
 }
 
-SDL_GraphicWorkerImpl &SDL_GraphicWorkerImpl::getInstance(){
+SDL_GraphicWorkerImpl &SDL_GraphicWorkerImpl::getInstance()
+{
 	if (selfGW == NULL)
 		selfGW = new SDL_GraphicWorkerImpl();
 	return *selfGW;
 }
 
-void SDL_GraphicWorkerImpl::delay(int sec){
-	SDL_Delay(sec * 1000);
+void SDL_GraphicWorkerImpl::delay(int mSec)
+{
+	SDL_Delay(mSec);
+}
+
+void SDL_GraphicWorkerImpl::initFPS()
+{
+	memset(frametimes, 0, sizeof(frametimes));
+	framecount = 0;
+	framespersecond = 0;
+	frametimelast = SDL_GetTicks();
+}
+
+int SDL_GraphicWorkerImpl::getFPS()
+{
+	Uint32 frametimesindex;
+	Uint32 getticks;
+	Uint32 count;
+
+	frametimesindex = framecount % FRAME_VALUES;
+	getticks = SDL_GetTicks();
+	frametimes[frametimesindex] = getticks - frametimelast;
+	frametimelast = getticks;
+	framecount++;
+
+	if (framecount < FRAME_VALUES)
+		count = framecount;
+	else
+		count = FRAME_VALUES;
+
+	framespersecond = 1;
+	for (Uint32 i = 0; i < count; i++){
+		framespersecond += frametimes[i];
+	}
+	framespersecond /= count;
+	framespersecond = 1000 / framespersecond;
+	return static_cast<int>(framespersecond);
 }

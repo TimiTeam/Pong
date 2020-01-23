@@ -4,7 +4,6 @@
 # include <iostream>
 # include "IGraphicWorker.hpp"
 
-# define FRAME_VALUES 10
 
 class Pong
 {
@@ -13,7 +12,7 @@ private:
 	int winSizeY;
 	IGraphicWorker &gw;
 	void setUpPlayer(AbstractPlayer &left, AbstractPlayer &right, Ball &ball);
-	void drawMenu(AbstractPlayer **palyerLeft, AbstractPlayer **playerRight, Ball &ball);
+	void drawMenu(AbstractPlayer **palyerLeft, AbstractPlayer **playerRight);
 
 public:
 	Pong(int winSizeX, int winSizeY, IGraphicWorker &gw);

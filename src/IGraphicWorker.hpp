@@ -14,6 +14,8 @@ public:
 	virtual bool initGame(const std::string title, int sizeX, int sizeY) = 0;
 	virtual void printBalckText(std::string text, int posX, int posY, int height, int width) = 0;
 	virtual bool isRunGame() = 0;
+	virtual void initFPS() = 0;
+	virtual int getFPS() = 0;
 	virtual void printMenu() = 0;
 	virtual bool isMultiplayerGame() = 0;
 	virtual void setPlayerOnArrows(AbstractPlayer &player) = 0;
@@ -24,6 +26,7 @@ public:
 	virtual void updateScreen() = 0;
 	virtual void clearScreen() = 0;
 	virtual void closeGame() = 0;
-	virtual void delay(int sec) = 0;
+	virtual void delay(int mSec) = 0;
+	virtual void getUserInput() = 0;
 };
 #endif

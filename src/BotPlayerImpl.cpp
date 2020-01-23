@@ -1,4 +1,5 @@
 #include "BotPlayerImpl.hpp"
+# include <chrono>
 
 BotPlayerImpl::BotPlayerImpl(float posX, float posY, int height, int width, Ball &ball) : AbstractPlayer(posX, posY, height, width), ball(ball)
 {
@@ -27,12 +28,19 @@ BotPlayerImpl& BotPlayerImpl::operator=(const BotPlayerImpl& src)
 void BotPlayerImpl::updateState(eDirection dir, int top, int bottom)
 {
 	(void)dir;
-	float ballPosY = ball.getPosY();
-	if (ball.getDirections() == RIGHT){
-		bool random = rand() % 10 == 0;
-		if (random && ballPosY < posY &&  posY - speed > top)
-			setPosY(posY - speed);
-		else if (random && ballPosY > posY && ballPosY > posY + height && posY + height + speed < bottom)
-			setPosY(posY + speed);
+	static auto start = std::chrono::system_clock::now();
+	auto end = std::chrono::system_clock::now();
+
+	std::chrono::duration<double> diff = end - start; 
+	if (diff.count() > 0.04)
+	{
+		start = end;
+		float ballPosY = ball.getPosY();
+		if (ball.getDirections() == RIGHT){
+			if  (ballPosY < posY &&  posY - speed > top)
+				setPosY(posY - speed);
+			else if (ballPosY > posY && ballPosY > posY + height && posY + height + speed < bottom)
+				setPosY(posY + speed);
+		}
 	}
 }

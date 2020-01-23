@@ -5,9 +5,10 @@ Ball *Ball::ball = 0;
 
 Ball::Ball()
 {
-	speed = 0;
+	speed = 10;
 	dirX = -1;
 	dirY = -1;
+	cofUpperSpeed = speed / 2;
 }
 
 Ball::Ball(const Ball& src)
@@ -91,25 +92,25 @@ void Ball::moveBall(int top, int bottom, int leftSide, int rightSide, AbstractPl
 		goal = true;
 	}
 	if (getDirections() == LEFT && !goal){
-		if (checkColision(posX, posY, height, 0, playerLeft.getPosX(), playerLeft.getPosY(), playerLeft.getHeight(), playerLeft.getWidth())){
+		if (checkColision(posX + (dirX * speed), posY + (dirY * speed), height, 0, playerLeft.getPosX(), playerLeft.getPosY(), playerLeft.getHeight(), playerLeft.getWidth())){
 			ricochetFromPlayer(playerLeft);
-			speed = std::abs(speed) + 0.1;
+			speed += cofUpperSpeed;
 		}
 	}
 	else if (!goal){
-		if (checkColision(posX , posY, height, width + speed, playerRight.getPosX(), playerRight.getPosY(), playerRight.getHeight(), 0)){
+		if (checkColision(posX + (dirX * speed), posY + (dirY * speed), height, width, playerRight.getPosX(), playerRight.getPosY(), playerRight.getHeight(), 0)){
 			ricochetFromPlayer(playerRight);
-			speed = (std::abs(speed) + 0.1) * -1;
+			speed += cofUpperSpeed;
 		}
 	}
 	if (goal){
 		posX = rightSide / 2 - width / 2;
 		posY = bottom / 2 - height / 2;
 		dirY = 0.f;
-		speed = 0;
+		speed = cofUpperSpeed * 10;
 	}else{
-		posX = posX + dirX + speed;
-		posY = posY + dirY;
+		posX = posX + (dirX * speed);
+		posY = posY + (dirY * speed);
 	}
 }
 
@@ -131,6 +132,12 @@ Ball& Ball::getInstance(){
 	if (ball == NULL)
 		ball = new Ball();
 	return *ball;
+}
+
+
+void Ball::setSpeed(float speed){
+	this->speed = speed;
+	cofUpperSpeed = speed / 10;
 }
 
 int Ball::getPosX(){
