@@ -30,7 +30,6 @@ ifeq ($(UNAME_S),Darwin)
                     -I $(CURDIR)/frameworks/SDL2_mixer.framework/Headers \
                     -I $(CURDIR)/frameworks/SDL2_ttf.framework/Headers/ \
                     -I $(CURDIR)/frameworks/SDL2_image.framework/Headers/
-	SDL2_FLAGS =
 	FLAG_F =        -F frameworks
 	SDL2_LINK =     -rpath frameworks -framework SDL2 -framework SDL2_mixer -framework SDL2_image -framework SDL2_ttf
 endif
@@ -38,10 +37,8 @@ endif
 ifeq ($(UNAME_S),Linux)
 	CC :=           g++
     SDL2_INC =
-    SDL2_FLAGS =   `sdl2-config --cflags`
     FLAG_F =
-    SDL2_LINK =     `sdl2-config --libs` -lSDL2_ttf -lSDL2_image -lSDL2_mixer
-    OTHER_FLAGS =       -pthread
+    SDL2_LINK =  `sdl2-config --cflags --libs` -lSDL2_ttf -lSDL2_image -lSDL2_mixer
 endif
 
 all: $(NAME)
@@ -56,7 +53,7 @@ $(NAME): $(OBJS)
 	$(CC) -o $@ $^ $(FLAG_F) $(SDL2_LINK) $(SDL2_INC)
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp | $(DIR_OBJ)
-	$(CC) -g  $(FLAGS) -c -o $@ $^ $(FLAG_F) $(SDL2_INC) $(SDL2_FLAGS)
+	$(CC) -g  $(FLAGS) -c -o $@ $^ $(FLAG_F) $(SDL2_INC)
 
 clean:
 	/bin/rm -rf $(OBJS)
