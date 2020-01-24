@@ -32,5 +32,6 @@ public:
 	void drawLine(int x1, int y1, int x2, int y2);
 	bool loadTTF(std::string pth, int size);
 	void drawRectArea(SDL_Rect *rect);
+	TTF_Font *getFont();
 };
 #endif

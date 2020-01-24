@@ -4,7 +4,7 @@
 # include <iostream>
 # include "IGraphicWorker.hpp"
 # include "SDL_Framework.hpp"
-# include <map>
+# include <vector>
 
 # define FRAME_VALUES 10
 
@@ -12,7 +12,7 @@ class SDL_GraphicWorkerImpl : public IGraphicWorker
 {
 private: 
 	static SDL_GraphicWorkerImpl *selfGW;
-	std::map<SDL_Keycode, Uint32> hooksEvent;
+	std::vector<SDL_Event> events;
 	int winSizeX;
 	int winSizeY;
 	SDL_Framework *framework;

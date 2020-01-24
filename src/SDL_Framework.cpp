@@ -146,6 +146,10 @@ void SDL_Framework::close(){
 		SDL_DestroyTexture(renderTexture);
 		renderTexture = NULL;
 	}
+	if (font != NULL){
+		TTF_CloseFont(font);
+		font = NULL;
+	}
 	TTF_Quit();
     IMG_Quit();
     SDL_Quit();
@@ -155,6 +159,10 @@ void SDL_Framework::clearScrean(){
 	SDL_RenderClear(ren);
 }
 
+
+TTF_Font *SDL_Framework::getFont(){
+	return font;
+}
 
 bool SDL_Framework::setRenderTarget(SDL_Texture *target){
 	if( SDL_SetRenderTarget(ren, target) != 0)

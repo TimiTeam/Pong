@@ -31,7 +31,7 @@ void Pong::setUpPlayer(AbstractPlayer &left, AbstractPlayer &right, Ball &ball)
 	int height = winSizeY / 8;
 	int width = winSizeX / 40;
 	int posY = winSizeY / 2 - height / 2;
-	float playerStep = winSizeY / 12;
+	float playerStep = winSizeY / 11;
 
 	left.setPosX(width * 2);
 	left.setPosY(posY);
@@ -93,11 +93,9 @@ void Pong::runGame()
 		bool isRun = gw.isRunGame();
 		int scoreWidth = winSizeX / 10;
 		int scoreHeight = scoreWidth / 2;
-		int fps;
 		double lag = 0.0;
 		const double mmPerSecond = 1.0 / 60.0;
 		auto start = std::chrono::system_clock::now();
-		gw.initFPS();
 		while (isRun && !win)
 		{
 			auto end = std::chrono::system_clock::now();
@@ -105,8 +103,6 @@ void Pong::runGame()
 			start = end;
 			lag += elapsed_seconds.count();
 			gw.clearScreen();
-			if(playerOne->getScore() > 10 || playerTwo->getScore() > 10)
-				win = true;
 			gw.getUserInput();
 			gw.updatePlayers();
 			while (lag >= mmPerSecond)
@@ -116,14 +112,16 @@ void Pong::runGame()
 				ball.moveBall(0, winSizeY, 0, winSizeX, *playerOne, *playerTwo);
 				lag -= mmPerSecond;
 			}
-			gw.printBalckText(std::to_string(fps), 5, 5, 100, 150);
 			gw.printBalckText(std::to_string(playerOne->getScore()) + " / " + (std::to_string(playerTwo->getScore())), winSizeX / 2 - scoreWidth / 2, 5, scoreHeight, scoreWidth);
 			gw.drawPlayer(*playerOne);
 			gw.drawPlayer(*playerTwo);
 			gw.drawBall(ball);
 			gw.updateScreen();
+			if(playerOne->getScore() > 10 || playerTwo->getScore() > 10){
+				gw.delay(1000);
+				win = true;
+			}
 			isRun = gw.isRunGame();
-			fps = gw.getFPS();
 		}
 		if (win){
 			std::string message = playerOne->getScore() > playerTwo->getScore() ? playerOne->getName() : playerTwo->getName();

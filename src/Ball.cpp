@@ -51,9 +51,7 @@ bool Ball::checkColision(int posX1, int posY1, int height1, int width1, int posX
         y = 1;
     if ((posY2 <= (posY1 +  height1)) && ((posY2 +  hefight2) >= (posY1 +  height1)))
         y = 1;
-    if (x == 1 && y == 1)
-        return (true);
-    return (false);
+    return (x == 1 && y == 1);
 }
 
 
@@ -64,13 +62,13 @@ void Ball::ricochetFromPlayer(AbstractPlayer &check){
 	int ballCenter = posY + height / 2;
 
 	if (posY + height >= playerPosY && ballCenter < playerPosY + part){
-		dirY = -1.1f;
+		dirY = -1.f;
 	}
 	else if (ballCenter >= playerPosY + part && ballCenter <= playerPosY + check.getHeight() - part){
 		dirY = 0.f;
 	}
 	else if (ballCenter > playerPosY + check.getHeight() - part && posY <= playerPosY + check.getHeight()){
-		dirY = 1.1f;
+		dirY = 1.f;
 	}
 	dirX *= -1.f;
 }

@@ -1,4 +1,6 @@
 #include "SDL_GraphicWorkerImpl.hpp"
+# include <vector>
+# include <algorithm>
 
 SDL_GraphicWorkerImpl *SDL_GraphicWorkerImpl::selfGW = 0;
 
@@ -84,16 +86,14 @@ void SDL_GraphicWorkerImpl::printMenu()
 	int headerSizeY = winSizeX / 4;
 	int typeSizeX = winSizeX / 3;
 	int typeSizeY = headerSizeY / 2;
-	SDL_Rect choice = {winSizeX / 2 - typeSizeX / 2 - 10, 5 + headerSizeY - 5, typeSizeX + 20, typeSizeY + 10};
+	SDL_Rect choice = {winSizeX / 2 - typeSizeX / 2 - 15, 5 + headerSizeY, typeSizeX + 30, typeSizeY + 5};
 
 	isMulti = false;
 	while (menuRun)
 	{
 		clearScreen();
+		framework->drawTexture(playerTexture, NULL, &choice);
 		printBalckText(menuHeader, winSizeX / 4, 5, headerSizeY, headerSizeX);
-		framework->setDrawColor(15, 130, 55);
-		framework->drawRectArea(&choice);
-		framework->setDrawColor(255, 255, 255);
 		printBalckText(singl, winSizeX / 2 - typeSizeX / 2, 5 + headerSizeY, typeSizeY, typeSizeX);
 		printBalckText(multi, winSizeX / 2 - typeSizeX / 2, 5 + headerSizeY + typeSizeY, typeSizeY, typeSizeX);
 		updateScreen();
@@ -107,11 +107,11 @@ void SDL_GraphicWorkerImpl::printMenu()
 			else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 			{
 				if (e.key.keysym.sym == SDLK_UP){
-					choice.y = 5 + headerSizeY - 5;
+					choice.y = 5 + headerSizeY;
 					isMulti = false;
 				}
 				if (e.key.keysym.sym == SDLK_DOWN){
-					choice.y = 5 + headerSizeY + typeSizeY - 5;
+					choice.y = 5 + headerSizeY + typeSizeY;
 					isMulti = true;
 				}
 				if (e.key.keysym.sym == SDLK_RETURN){
@@ -131,34 +131,33 @@ bool SDL_GraphicWorkerImpl::isMultiplayerGame()
 void SDL_GraphicWorkerImpl::getUserInput(){
 	SDL_Event e;
 
-	while (SDL_PollEvent(&e))
-	{
-		if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
-			isRun = false;
-		else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP){
-			hooksEvent[e.key.keysym.sym] = e.type;
-		}
+	while (SDL_PollEvent(&e)){
+		if (e.type == SDL_KEYDOWN)
+			events.push_back(e);
 	}
 }
 
 void SDL_GraphicWorkerImpl::updatePlayers()
 {
+	eDirection dirArrows = NON;
+	eDirection dirKeys = NON;
 	int top = 0;
 	int bottom = winSizeY - top;
 
-	eDirection dirArrows = hooksEvent[SDLK_UP] ==  SDL_KEYDOWN ? UP : hooksEvent[SDLK_DOWN] == SDL_KEYDOWN ? DOWN : NON;
-	
-	playerArrow->updateState(dirArrows, top, bottom);
-
-	if (!isMulti){
-		playerKeyboard->updateState(NON, top, bottom);
-
-	}else{
-		eDirection dirKey = hooksEvent[SDLK_w] ==  SDL_KEYDOWN ? UP : hooksEvent[SDLK_s] == SDL_KEYDOWN ? DOWN : NON;
-		playerKeyboard->updateState(dirKey, top, bottom);
-		
+	for(auto it = std::rbegin(events); it != std::rend(events); ++it){
+		if (it->key.keysym.sym == SDLK_UP || it->key.keysym.sym == SDLK_DOWN){
+			dirArrows = it->key.keysym.sym == SDLK_UP ? UP : DOWN;
+		}
+		else if (it->key.keysym.sym == SDLK_w || it->key.keysym.sym == SDLK_s){
+			dirKeys = it->key.keysym.sym == SDLK_w ? UP : DOWN;
+		}
+		else if (it->type == SDL_QUIT || it->key.keysym.sym == SDLK_ESCAPE){
+			isRun = false;
+		}
 	}
-	hooksEvent.clear();
+	events.clear();
+	playerArrow->updateState(dirArrows, top, bottom);
+	playerKeyboard->updateState(dirKeys, top, bottom);
 }
 
 bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int sizeY)
@@ -171,10 +170,10 @@ bool SDL_GraphicWorkerImpl::initGame(const std::string title, int sizeX, int siz
 	{
 		isRun = true;
 		if (playerTexture == NULL)
-			playerTexture = framework->loadTexture("Racket.jpeg");
+			playerTexture = framework->loadTexture("res/Racket.jpeg");
 		if (ballTexture == NULL)
-			ballTexture = framework->loadTexture("Ball.png");
-		framework->loadTTF("KarmaFuture.ttf", 28);
+			ballTexture = framework->loadTexture("res/Ball.png");
+		framework->loadTTF("res/KarmaFuture.ttf", 28);
 	}
 	return isRun;
 }
@@ -187,10 +186,10 @@ void SDL_GraphicWorkerImpl::drawPlayer(AbstractPlayer &player)
 
 void SDL_GraphicWorkerImpl::drawBall(Ball &ball)
 {
-	SDL_Rect rect = {static_cast<int>(ball.getPosX()), static_cast<int>(ball.getPosY()), ball.getWidth(), ball.getHeight()};
-	framework->drawTexture(ballTexture, NULL, &rect);
 	framework->setDrawColor(1, 1, 1);
 	framework->drawLine(winSizeX / 2, 0, winSizeX / 2, winSizeY);
+	SDL_Rect rect = {static_cast<int>(ball.getPosX()), static_cast<int>(ball.getPosY()), ball.getWidth(), ball.getHeight()};
+	framework->drawTexture(ballTexture, NULL, &rect);
 }
 
 void SDL_GraphicWorkerImpl::updateScreen()
