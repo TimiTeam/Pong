@@ -29,7 +29,7 @@ public:
 	AbstractPlayer(std::string name);
 	AbstractPlayer(float posX, float posY, int height, int width);
 	AbstractPlayer(const AbstractPlayer& src);
-	~AbstractPlayer();
+	virtual ~AbstractPlayer();
 	AbstractPlayer& operator=(const AbstractPlayer& src);
 	virtual void updateState(eDirection dir, int top, int bottom) = 0;
 	void setPosX(float x);

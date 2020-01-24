@@ -36,6 +36,7 @@ public:
 	SDL_GraphicWorkerImpl& operator=(const SDL_GraphicWorkerImpl& src);
 
 	static SDL_GraphicWorkerImpl &getInstance();
+	static void resetSDL_GraphicWorkerImpl();
 
 	// IGraphicWorker
 	bool initGame(const std::string title, int sizeX, int sizeY);

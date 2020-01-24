@@ -1,11 +1,12 @@
 #include "SDL_Framework.hpp"
 
-SDL_Texture *SDL_Framework::renderTexture = 0;
+SDL_Texture *SDL_Framework::renderTexture = NULL;
 
 SDL_Framework::SDL_Framework()
 {
 	win = NULL;
 	ren = NULL;
+
 	font = NULL;
 }
 
@@ -16,6 +17,7 @@ SDL_Framework::SDL_Framework(const SDL_Framework& src)
 
 SDL_Framework::~SDL_Framework()
 {
+	close();	
 }
 
 SDL_Framework& SDL_Framework::operator=(const SDL_Framework& src)

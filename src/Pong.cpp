@@ -75,6 +75,7 @@ void Pong::drawMenu(AbstractPlayer **playerOne, AbstractPlayer **playerTwo)
 		gw.updateScreen();
 		gw.delay(2000);
 	}
+	PlayerFactory::resetPlayerFactory();
 }
 
 void Pong::runGame()
@@ -133,6 +134,9 @@ void Pong::runGame()
 			gw.updateScreen();
 			gw.delay(3000);
 		}
+		delete playerOne;
+		delete playerTwo;
+		Ball::resetBall();
 	}
 	gw.closeGame();
 }

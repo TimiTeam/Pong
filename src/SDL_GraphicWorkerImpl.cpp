@@ -22,7 +22,11 @@ SDL_GraphicWorkerImpl::SDL_GraphicWorkerImpl(const SDL_GraphicWorkerImpl &src)
 SDL_GraphicWorkerImpl::~SDL_GraphicWorkerImpl()
 {
 	closeGame();
-	delete[] framework;
+	delete framework;
+}
+
+void SDL_GraphicWorkerImpl::resetSDL_GraphicWorkerImpl(){
+	delete selfGW;
 }
 
 SDL_GraphicWorkerImpl &SDL_GraphicWorkerImpl::operator=(const SDL_GraphicWorkerImpl &src)

@@ -22,6 +22,8 @@ SRCS := $(addprefix $(DIR_SRC)/, $(SRCS))
 
 FLAGS = -Wall -Wextra -Werror -std=c++14
 
+
+
 ifeq ($(UNAME_S),Darwin)
 	CC :=			clang++
 	SDL2_INC =      -I $(CURDIR)/frameworks/SDL2.framework/Headers/ \

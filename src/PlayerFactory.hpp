@@ -23,6 +23,7 @@ public:
 	~PlayerFactory();
 	PlayerFactory& operator=(const PlayerFactory& src);
 	static PlayerFactory& getInstance();
+	static void resetPlayerFactory();
 	AbstractPlayer *createPlayer(ePlayerType tyep, std::string name);
 };
 #endif

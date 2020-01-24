@@ -35,6 +35,7 @@ public:
 	void setWidth(int width);
 	void setPosition(int x, int y);
 	void setSpeed(float speed);
-	static Ball& getInstance();
+	static Ball &getInstance();
+	static void resetBall();
 };
 #endif

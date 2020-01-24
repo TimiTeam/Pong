@@ -8,6 +8,6 @@ int 	main(void){
 	Pong p(1260, 700, gw);
 	p.runGame();
 
-//	system("leaks -q Pong");
+	SDL_GraphicWorkerImpl::resetSDL_GraphicWorkerImpl();
 	return (0);
 }

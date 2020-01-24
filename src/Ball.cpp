@@ -1,7 +1,7 @@
 #include "Ball.hpp"
 #include <cmath> 
 
-Ball *Ball::ball = 0;
+Ball *Ball::ball = NULL;
 
 Ball::Ball()
 {
@@ -19,6 +19,10 @@ Ball::Ball(const Ball& src)
 Ball::~Ball()
 {
 	
+}
+
+void Ball::resetBall(){
+	delete ball;
 }
 
 Ball& Ball::operator=(const Ball& src)
@@ -125,8 +129,7 @@ eDirection Ball::getDirections(){
 	return NON;
 }
 
-
-Ball& Ball::getInstance(){
+Ball &Ball::getInstance(){
 	if (ball == NULL)
 		ball = new Ball();
 	return *ball;

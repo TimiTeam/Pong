@@ -15,7 +15,10 @@ PlayerFactory::PlayerFactory(const PlayerFactory& src)
 
 PlayerFactory::~PlayerFactory()
 {
-	delete [] factory;
+}
+
+void PlayerFactory::resetPlayerFactory(){
+	delete factory;
 }
 
 PlayerFactory& PlayerFactory::operator=(const PlayerFactory& src)
